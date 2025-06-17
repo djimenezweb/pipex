@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/17 11:52:24 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:00:13 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -18,7 +18,7 @@ int	main(int argc, char *argv[], char *envp[])
 		return (0);
 	
 	char *file1 = argv[1];
-	int fd1 = open(file1, O_RDONLY);
+	//int fd1 = open(file1, O_RDONLY);
 	char **command1 = ft_split(argv[2], ' ');
 	ft_printf("command1[0]: %s\n", command1[0]);
 	ft_printf("command1[1]: %s\n", command1[1]);
