@@ -1,21 +1,22 @@
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/17 11:00:17 by danielji         ###   ########.fr       */
+/*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
+/*   Updated: 2025/06/17 10:59:45 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-#include "pipex.h"
+#ifndef PIPEX_H
+# define PIPEX_H
 
-int	main(int argc, char *argv[])
-{
-	(void)argc;
-	(void)argv;
-	ft_printf("hola\n");
-	return (0);
-}
+# include "libft/libft.h"
+//# include <limits.h>
+//# include <stdlib.h>
+//# include <unistd.h>
+
+
+#endif
