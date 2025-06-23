@@ -1,7 +1,7 @@
 NAME	= pipex
 CC		= cc
 CFLAGS	= -Wall -Werror -Wextra -I./libft
-SRC		= pipex.c
+SRC		= pipex.c split_helpers.c
 OBJ		= $(SRC:.c=.o)
 DEPS	= libft/libft.a
 

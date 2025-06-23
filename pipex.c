@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/22 21:01:01 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:10:24 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -19,18 +19,26 @@
 */
 int	main(int argc, char *argv[])
 {
-	/* if (argc != 5)
-		return (0); */
-	(void)argc;
-	(void)argv;
+	if (argc != 5)
+		return (0);
 	int fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
-	/* char **command1;
-	char **command2; */
+	char *command1 = split_command(argv[2]);
+	char *args1 = split_args(argv[2]);
+	ft_printf("[%s] [%s]", command1, args1);
+	/*char **command2; */
 
-	/* fd[0] = open(argv[1], O_RDONLY);
-	fd[1] = open(argv[4], O_RDWR); */
+	int fd_in = open(argv[1], O_RDONLY);
+	if (fd_in == -1)
+	{
+		// Manage errors
+	}
+	int fd_out = open(argv[4], O_RDWR|O_CREAT, 0666);
+	if (fd_out == -1)
+	{
+		// Manage errors
+	}
 
 	if (pipe(fd) == -1)
 		return (1);
@@ -40,13 +48,15 @@ int	main(int argc, char *argv[])
 	if (pid1 < 0)
 		return 2;
 	if (pid1 == 0)
-		{
-			dup2(fd[1], STDOUT_FILENO);
-			close(fd[0]);
-			close(fd[1]);
-			char **args = ft_split("ping -c 3 google.com", ' ');
-			execve("/usr/bin/ping", args, NULL);
-			free(args);
+	{
+		dup2(fd_in, STDIN_FILENO);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[0]);
+		close(fd[1]);
+		char **args = ft_split(argv[2], ' ');
+		//char **args = ft_split("ping -c 3 google.com", ' ');
+		execve("/usr/bin/grep", args, NULL);
+		free(args);
 	}
 
 	// CHILD PROCESS 2
@@ -56,15 +66,18 @@ int	main(int argc, char *argv[])
 	if (pid2 == 0)
 	{
 		dup2(fd[0], STDIN_FILENO);
+		dup2(fd_out, STDOUT_FILENO);
 		close(fd[0]);
 		close(fd[1]);
-		char **args = ft_split("grep rtt", ' ');
+		char **args = ft_split(argv[3], ' ');
 		execve("/usr/bin/grep", args, NULL);
 		free(args);
 	}
 
 	close(fd[0]);
 	close(fd[1]);
+	close(fd_in);
+	close(fd_out);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
 
