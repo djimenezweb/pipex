@@ -1,18 +1,18 @@
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_command.c                                    :+:      :+:    :+:   */
+/*   split_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 11:52:20 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/23 13:09:49 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:15:23 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
 
-char *split_command(char *str)
+char	*split_command(char *str)
 {
 	int		i;
 	int		start;
@@ -33,7 +33,7 @@ char *split_command(char *str)
 	return (command);
 }
 
-char *split_args(char *str)
+char	*split_args(char *str)
 {
 	int		start;
 	int		end;
