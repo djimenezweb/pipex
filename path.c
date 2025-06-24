@@ -6,24 +6,11 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 10:19:41 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/24 11:55:22 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:23:50 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
-
-void	free_arr_str(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-}
 
 char	*path_env(char *envp[])
 {

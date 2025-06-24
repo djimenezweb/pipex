@@ -1,0 +1,2 @@
+	@$(MAKE) --no-print-directory -C libft clean
+	@$(MAKE) --no-print-directory -C libft fclean

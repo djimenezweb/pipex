@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/23 13:10:24 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:27:14 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -17,17 +17,17 @@
 < Makefile grep libft | tr -d "@" > outfile
 ./pipex Makefile "grep libft" "tr -d @" outfile
 */
-int	main(int argc, char *argv[])
+int	main(int argc, char *argv[], char *envp[])
 {
-	if (argc != 5)
+	if (argc < 5)
 		return (0);
-	int fd[2];
+	int	fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
-	char *command1 = split_command(argv[2]);
-	char *args1 = split_args(argv[2]);
-	ft_printf("[%s] [%s]", command1, args1);
-	/*char **command2; */
+
+	char *command;
+	char *fullcommand;
+	char **args;
 
 	int fd_in = open(argv[1], O_RDONLY);
 	if (fd_in == -1)
@@ -53,10 +53,14 @@ int	main(int argc, char *argv[])
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[0]);
 		close(fd[1]);
-		char **args = ft_split(argv[2], ' ');
-		//char **args = ft_split("ping -c 3 google.com", ' ');
-		execve("/usr/bin/grep", args, NULL);
-		free(args);
+		command = split_command(argv[2]);
+		fullcommand = path(command, envp);
+		args = ft_split(argv[2], ' ');
+		//args = split_args(argv[2]);
+		execve(fullcommand, args, NULL);
+		free(command);
+		free(fullcommand);
+		free_arr_str(args);
 	}
 
 	// CHILD PROCESS 2
@@ -69,9 +73,12 @@ int	main(int argc, char *argv[])
 		dup2(fd_out, STDOUT_FILENO);
 		close(fd[0]);
 		close(fd[1]);
-		char **args = ft_split(argv[3], ' ');
-		execve("/usr/bin/grep", args, NULL);
-		free(args);
+		command = split_command(argv[3]);
+		fullcommand = path(command, envp);
+		args = ft_split(argv[3], ' ');
+		//args = split_args(argv[3]);
+		execve(fullcommand, args, NULL);
+		free_arr_str(args);
 	}
 
 	close(fd[0]);
@@ -81,11 +88,5 @@ int	main(int argc, char *argv[])
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
 
-/*	command1 = ft_split(argv[2], ' ');
-	command2 = ft_split(argv[3], ' ');
-	char *pathname1 = ft_strjoin("/usr/bin/", command1[0]);
-	execve(pathname1, command1, envp);
-	free(command1);
-	free(pathname1);*/
 	return (0);
 }
