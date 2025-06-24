@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/24 20:25:42 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:27:37 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -78,7 +78,6 @@ int	main(int argc, char *argv[], char *envp[])
 			command = split_command(argv[i + 2]);
 			fullcommand = path(command, envp);
 			args = ft_split(argv[i + 2], ' ');
-			ft_printf("Loop %d: %s", i, fullcommand);
 			//args = split_args(argv[i + 2]);
 			execve(fullcommand, args, envp);
 			//close(fd[0]);
