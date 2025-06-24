@@ -6,11 +6,33 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/24 20:27:37 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:26:50 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
+
+void	run_command(char *str, char *envp[])
+{
+	char	*command;
+	char	*pathname;
+	char	**args;
+
+	// Parse and execute command
+	command = split_command(str);
+	args = ft_split(str, ' ');
+	//args = split_args(argv);
+	pathname = path(command, envp);
+	// Check execve return value; if it fails you should return exit(127) or similar
+	// Only free if execve fails!
+	if (execve(pathname, args, envp) == -1)
+	{
+		free(command);
+		free(pathname);
+		free_arr_str(args);
+	}
+}
+
 /* PRUEBAS:
 < Makefile grep libft | grep clean > outfile
 
@@ -44,9 +66,6 @@ int	main(int argc, char *argv[], char *envp[])
 	while (i < loops)
 	{
 		int		fd[2];
-		char	*command;
-		char	*fullcommand;
-		char	**args;
 
 		if (pipe(fd) == -1)
 			return (1);
@@ -65,36 +84,22 @@ int	main(int argc, char *argv[], char *envp[])
 			else
 				dup2(fd[1], STDOUT_FILENO);
 			
-			// Close unused fd
-			/*close(fd[0]);
+			// Close no longer needed fd
 			if (prev_fd != -1)
 				close(prev_fd);
-			if (i != loops - 1)
-			{
-				close(fd[1]);
-			} */
-
-			// Parse and execute command
-			command = split_command(argv[i + 2]);
-			fullcommand = path(command, envp);
-			args = ft_split(argv[i + 2], ' ');
-			//args = split_args(argv[i + 2]);
-			execve(fullcommand, args, envp);
-			//close(fd[0]);
-			//close(fd[1]);
-			free(command);
-			free(fullcommand);
-			free_arr_str(args);
+			close(fd[0]);
+			close(fd[1]);
+			if (i == 0)
+				close(input_fd);
+			if (i == loops - 1)
+				close(output_fd);
+			run_command(argv[i + 2], envp);
 		}
 		// PARENT
 		if (prev_fd != -1)
 			close(prev_fd);
-		if(i < loops - 1)
-		{
-			close(fd[1]);
-			prev_fd = fd[0];
-		}
-		close(input_fd);
+		close(fd[1]);
+		prev_fd = fd[0];
 		i++;
 	}
 	// Wait
@@ -104,6 +109,5 @@ int	main(int argc, char *argv[], char *envp[])
 		wait(NULL);
 		i++;
 	}
-	close(output_fd);
 	return (0);
 }
