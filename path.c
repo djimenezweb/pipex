@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 10:19:41 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/24 12:23:50 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:57:41 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -14,10 +14,13 @@
 
 char	*path_env(char *envp[])
 {
+	char	*path;
+
 	while (*envp)
 	{
-		if (ft_strnstr(*envp, "PATH", 4))
-			return(ft_strnstr(*envp, "PATH", 4) + 5);
+		path = ft_strnstr(*envp, "PATH", 4);
+		if (path)
+			return(path + 5);
 		envp++;
 	}
 	return (NULL);

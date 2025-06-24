@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/24 12:27:14 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:47:06 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -78,6 +78,8 @@ int	main(int argc, char *argv[], char *envp[])
 		args = ft_split(argv[3], ' ');
 		//args = split_args(argv[3]);
 		execve(fullcommand, args, NULL);
+		free(command);
+		free(fullcommand);
 		free_arr_str(args);
 	}
 
