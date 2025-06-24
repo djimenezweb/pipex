@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/24 14:28:43 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:25:42 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -22,72 +22,89 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc < 5)
 		return (0);
 	int		loops;
-	int		fd[2];
 	int		prev_fd = -1;
-	int		last_fd;
+	int		input_fd;
+	int		output_fd;
 	int		i;
-	pid_t	pids[argc - 3];
-
+	pid_t	pid;
+	
 	i = 0;
 	loops = argc - 3;
-	fd[0] = open(argv[1], O_RDONLY);
-	if (fd[0] == -1)
+	input_fd = open(argv[1], O_RDONLY);
+	if (input_fd == -1)
 	{
 		// Manage errors
 	}
-	last_fd = open(argv[4], O_RDWR|O_CREAT, 0666);
-	if (last_fd == -1)
+	output_fd = open(argv[argc - 1], O_RDWR|O_CREAT, 0666);
+	if (output_fd == -1)
 	{
 		// Manage errors
 	}
-
+	
 	while (i < loops)
 	{
+		int		fd[2];
 		char	*command;
 		char	*fullcommand;
 		char	**args;
 
 		if (pipe(fd) == -1)
 			return (1);
-	
-		pids[i] = fork();
-		if (pids[i] < 0)
+		pid = fork();
+		if (pid < 0)
 			return 2;
-		if (pids[i] == 0)
+		if (pid == 0)
 		{
-			dup2(fd[0], STDIN_FILENO);
-			dup2(fd[1], STDOUT_FILENO);
-			close(fd[0]);
-			close(fd[1]);
+			// CHILD PROCESS
+			if (i == 0)
+				dup2(input_fd, STDIN_FILENO);
+			else
+				dup2(prev_fd, STDIN_FILENO);
+			if (i == loops - 1)
+				dup2(output_fd, STDOUT_FILENO);
+			else
+				dup2(fd[1], STDOUT_FILENO);
+			
+			// Close unused fd
+			/*close(fd[0]);
+			if (prev_fd != -1)
+				close(prev_fd);
+			if (i != loops - 1)
+			{
+				close(fd[1]);
+			} */
+
+			// Parse and execute command
 			command = split_command(argv[i + 2]);
 			fullcommand = path(command, envp);
 			args = ft_split(argv[i + 2], ' ');
+			ft_printf("Loop %d: %s", i, fullcommand);
 			//args = split_args(argv[i + 2]);
-			execve(fullcommand, args, NULL);
+			execve(fullcommand, args, envp);
+			//close(fd[0]);
+			//close(fd[1]);
 			free(command);
 			free(fullcommand);
 			free_arr_str(args);
 		}
+		// PARENT
+		if (prev_fd != -1)
+			close(prev_fd);
+		if(i < loops - 1)
+		{
+			close(fd[1]);
+			prev_fd = fd[0];
+		}
+		close(input_fd);
+		i++;
 	}
-
-	if (prev_fd != -1)
-		close(prev_fd);
-	if(i < loops - 1)
-	{
-		close(fd[1]);
-		prev_fd = fd[0];
-	}
+	// Wait
 	i = 0;
 	while(i < loops)
 	{
-		waitpid(pids[i], NULL, 0);
+		wait(NULL);
 		i++;
 	}
-
-
-/*		dup2(fd[0], STDIN_FILENO);
-		dup2(fd_out, STDOUT_FILENO); */
-	close(last_fd);
-
+	close(output_fd);
 	return (0);
 }
