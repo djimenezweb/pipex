@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 12:52:37 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:58:25 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -76,7 +76,7 @@ int	main(int argc, char *argv[], char *envp[])
 	p = init_structure(argc, argv);
 	while (i < p.loops)
 	{
-		// Don't create pipe on the last iteration
+		// Create pipe except on last iteration
 		if (!is_last(i, p.loops) && pipe(p.fd) == -1)
 			return (1);
 		pid = fork();
