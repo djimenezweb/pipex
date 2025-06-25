@@ -6,11 +6,18 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 11:32:17 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:19:31 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
+
+int	is_last(int i, int count)
+{
+	if (i == count - 1)
+		return (1);
+	return (0);
+}
 
 void	run_command(char *str, char *envp[])
 {
@@ -32,40 +39,44 @@ void	run_command(char *str, char *envp[])
 	}
 }
 
+void	child_process(int i, t_pipex p, char *str, char *envp[])
+{
+	dup2(p.prev_fd, STDIN_FILENO);
+	if (is_last(i, p.loops))
+		dup2(p.output_fd, STDOUT_FILENO);
+	else
+		dup2(p.fd[1], STDOUT_FILENO);
+	close(p.prev_fd);
+	close(p.fd[0]);
+	close(p.fd[1]);
+	if (is_last(i, p.loops))
+		close(p.output_fd);
+	run_command(str, envp);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	int		i;
-	int		prev_fd;
-	int		output_fd;
+	t_pipex	p;
 	pid_t	pid;
-	int		fd[2];
 
 	if (argc < 5)
 		return (0);
 	i = 0;
-	prev_fd = open_input(argv[1]);
-	output_fd = open_output(argv[argc - 1]);
-	while (i < argc - 3)
+	p.loops = argc - 3;
+	p.prev_fd = open_input(argv[1]);
+	p.output_fd = open_output(argv[argc - 1]);
+	while (i < p.loops)
 	{
 		// Don't create pipe on the last iteration
-		if (i != (argc - 3) - 1)
-			if (pipe(fd) == -1)
+		if (!is_last(i, p.loops))
+			if (pipe(p.fd) == -1)
 				return (1);
 		pid = fork();
 		// CHILD PROCESS
 		if (pid == 0)
 		{
-			dup2(prev_fd, STDIN_FILENO);
-			if (i == (argc - 3) - 1)
-				dup2(output_fd, STDOUT_FILENO);
-			else
-				dup2(fd[1], STDOUT_FILENO);
-			close(prev_fd);
-			close(fd[0]);
-			close(fd[1]);
-			if (i == (argc - 3) - 1)
-				close(output_fd);
-			run_command(argv[i + 2], envp);
+			child_process(i, p, argv[i + 2], envp);
 		}
 		else if (pid < 0)
 		{
@@ -73,11 +84,11 @@ int	main(int argc, char *argv[], char *envp[])
 			return (2);
 		}
 		// PARENT
-		close(prev_fd);
-		close(fd[1]);
-		prev_fd = fd[0];
+		close(p.prev_fd);
+		close(p.fd[1]);
+		p.prev_fd = p.fd[0];
 		i++;
 	}
-	wait_chidren(argc - 3);
+	wait_chidren(p.loops);
 	return (0);
 }

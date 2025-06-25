@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 11:28:59 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:13:30 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -20,6 +20,14 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 
+typedef struct s_pipex
+{
+	int	loops;
+	int	prev_fd;
+	int	output_fd;
+	int	fd[2];
+}		t_pipex;
+
 // path.c
 char	*path_env(char *envp[]);
 char	*path(char *command, char *envp[]);
@@ -29,6 +37,10 @@ void	wait_chidren(int count);
 int		open_input(char *path);
 int		open_output(char *path);
 void	free_arr_str(char **arr);
+
+// pipex.c
+void	run_command(char *str, char *envp[]);
+void	child_process(int i, t_pipex p, char *str, char *envp[]);
 
 // split_helpers.c
 char	*split_command(char *str);
