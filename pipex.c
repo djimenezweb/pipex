@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 12:58:25 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:05:50 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -56,7 +56,7 @@ void	child_process(int i, t_pipex p, char *str, char *envp[])
 
 t_pipex	init_structure(int argc, char *argv[])
 {
-	t_pipex p;
+	t_pipex	p;
 
 	p.loops = argc - 3;
 	p.prev_fd = open_input(argv[1]);
