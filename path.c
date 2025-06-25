@@ -6,13 +6,13 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 10:19:41 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 10:33:24 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:52:03 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
 
-char	*path_env(char *envp[])
+char	*get_path_env(char *envp[])
 {
 	char	*path;
 
@@ -37,7 +37,7 @@ char	*path(char *str, char *envp[])
 		return (str);
 	i = 0;
 	command = ft_strjoin("/", str);
-	paths = ft_split(path_env(envp), ':');
+	paths = ft_split(get_path_env(envp), ':');
 	while (paths[i])
 	{
 		fullpath = ft_strjoin(paths[i], command);

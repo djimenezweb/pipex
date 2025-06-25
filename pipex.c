@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 12:19:31 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:52:37 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -54,6 +54,16 @@ void	child_process(int i, t_pipex p, char *str, char *envp[])
 	run_command(str, envp);
 }
 
+t_pipex	init_structure(int argc, char *argv[])
+{
+	t_pipex p;
+
+	p.loops = argc - 3;
+	p.prev_fd = open_input(argv[1]);
+	p.output_fd = open_output(argv[argc - 1]);
+	return (p);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	int		i;
@@ -63,21 +73,16 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc < 5)
 		return (0);
 	i = 0;
-	p.loops = argc - 3;
-	p.prev_fd = open_input(argv[1]);
-	p.output_fd = open_output(argv[argc - 1]);
+	p = init_structure(argc, argv);
 	while (i < p.loops)
 	{
 		// Don't create pipe on the last iteration
-		if (!is_last(i, p.loops))
-			if (pipe(p.fd) == -1)
-				return (1);
+		if (!is_last(i, p.loops) && pipe(p.fd) == -1)
+			return (1);
 		pid = fork();
 		// CHILD PROCESS
 		if (pid == 0)
-		{
 			child_process(i, p, argv[i + 2], envp);
-		}
 		else if (pid < 0)
 		{
 			// Handle errors

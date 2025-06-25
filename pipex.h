@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 12:13:30 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:55:00 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -29,7 +29,7 @@ typedef struct s_pipex
 }		t_pipex;
 
 // path.c
-char	*path_env(char *envp[]);
+char	*get_path_env(char *envp[]);
 char	*path(char *command, char *envp[]);
 
 // pipex_helpers.c
@@ -39,6 +39,7 @@ int		open_output(char *path);
 void	free_arr_str(char **arr);
 
 // pipex.c
+int		is_last(int i, int count);
 void	run_command(char *str, char *envp[]);
 void	child_process(int i, t_pipex p, char *str, char *envp[]);
 
