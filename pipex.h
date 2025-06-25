@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 13:13:53 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:19:06 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -31,7 +31,7 @@ typedef struct s_pipex
 
 // path.c
 char	*get_path_env(char *envp[]);
-char	*path(char *command, char *envp[]);
+char	*path(char *str, char **paths);
 
 // pipex_helpers.c
 void	wait_chidren(int count);
