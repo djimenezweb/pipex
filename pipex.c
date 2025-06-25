@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 13:05:50 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:15:49 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -19,7 +19,7 @@ int	is_last(int i, int count)
 	return (0);
 }
 
-void	run_command(char *str, char *envp[])
+void	run_command(char *str, t_pipex p, char *envp[])
 {
 	char	*command;
 	char	*pathname;
@@ -29,7 +29,7 @@ void	run_command(char *str, char *envp[])
 	command = split_command(str);
 	args = ft_split(str, ' ');
 	//args = split_args(argv);
-	pathname = path(command, envp);
+	pathname = path(command, p.paths);
 	// If execve fails you should return exit(127) or similar
 	if (execve(pathname, args, envp) == -1)
 	{
@@ -39,7 +39,7 @@ void	run_command(char *str, char *envp[])
 	}
 }
 
-void	child_process(int i, t_pipex p, char *str, char *envp[])
+void	child_process(int i, t_pipex p, char *command, char *envp[])
 {
 	dup2(p.prev_fd, STDIN_FILENO);
 	if (is_last(i, p.loops))
@@ -51,16 +51,17 @@ void	child_process(int i, t_pipex p, char *str, char *envp[])
 	close(p.fd[1]);
 	if (is_last(i, p.loops))
 		close(p.output_fd);
-	run_command(str, envp);
+	run_command(command, p, envp);
 }
 
-t_pipex	init_structure(int argc, char *argv[])
+t_pipex	init_structure(int argc, char *argv[], char *envp[])
 {
 	t_pipex	p;
 
 	p.loops = argc - 3;
 	p.prev_fd = open_input(argv[1]);
 	p.output_fd = open_output(argv[argc - 1]);
+	p.paths = ft_split(get_path_env(envp), ':');
 	return (p);
 }
 
@@ -73,7 +74,7 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc < 5)
 		return (0);
 	i = 0;
-	p = init_structure(argc, argv);
+	p = init_structure(argc, argv, envp);
 	while (i < p.loops)
 	{
 		// Create pipe except on last iteration
@@ -95,5 +96,6 @@ int	main(int argc, char *argv[], char *envp[])
 		i++;
 	}
 	wait_chidren(p.loops);
+	free_arr_str(p.paths);
 	return (0);
 }
