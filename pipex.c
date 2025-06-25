@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/24 23:26:50 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 10:09:37 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -23,8 +23,7 @@ void	run_command(char *str, char *envp[])
 	args = ft_split(str, ' ');
 	//args = split_args(argv);
 	pathname = path(command, envp);
-	// Check execve return value; if it fails you should return exit(127) or similar
-	// Only free if execve fails!
+	// If execve fails you should return exit(127) or similar
 	if (execve(pathname, args, envp) == -1)
 	{
 		free(command);
@@ -44,11 +43,12 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc < 5)
 		return (0);
 	int		loops;
-	int		prev_fd = -1;
+	int		prev_fd;
 	int		input_fd;
 	int		output_fd;
 	int		i;
 	pid_t	pid;
+	int		fd[2];
 	
 	i = 0;
 	loops = argc - 3;
@@ -57,7 +57,7 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		// Manage errors
 	}
-	output_fd = open(argv[argc - 1], O_RDWR|O_CREAT, 0666);
+	output_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (output_fd == -1)
 	{
 		// Manage errors
@@ -65,8 +65,6 @@ int	main(int argc, char *argv[], char *envp[])
 	
 	while (i < loops)
 	{
-		int		fd[2];
-
 		if (pipe(fd) == -1)
 			return (1);
 		pid = fork();
@@ -85,7 +83,7 @@ int	main(int argc, char *argv[], char *envp[])
 				dup2(fd[1], STDOUT_FILENO);
 			
 			// Close no longer needed fd
-			if (prev_fd != -1)
+			if (i != 0)
 				close(prev_fd);
 			close(fd[0]);
 			close(fd[1]);
@@ -96,7 +94,7 @@ int	main(int argc, char *argv[], char *envp[])
 			run_command(argv[i + 2], envp);
 		}
 		// PARENT
-		if (prev_fd != -1)
+		if (i != 0)
 			close(prev_fd);
 		close(fd[1]);
 		prev_fd = fd[0];
