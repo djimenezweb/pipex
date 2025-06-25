@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 10:19:41 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/24 12:57:41 by danielji         ###   ########.fr       */
+/*   Updated: 2025/06/25 10:33:24 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -20,7 +20,7 @@ char	*path_env(char *envp[])
 	{
 		path = ft_strnstr(*envp, "PATH", 4);
 		if (path)
-			return(path + 5);
+			return (path + 5);
 		envp++;
 	}
 	return (NULL);
@@ -35,7 +35,6 @@ char	*path(char *str, char *envp[])
 
 	if (access(str, X_OK) == 0)
 		return (str);
-
 	i = 0;
 	command = ft_strjoin("/", str);
 	paths = ft_split(path_env(envp), ':');
@@ -43,7 +42,7 @@ char	*path(char *str, char *envp[])
 	{
 		fullpath = ft_strjoin(paths[i], command);
 		if (access(fullpath, X_OK) == 0)
-			break;
+			break ;
 		free(fullpath);
 		i++;
 	}
