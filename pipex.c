@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 13:15:49 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:29:57 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -38,7 +38,6 @@ void	run_command(char *str, t_pipex p, char *envp[])
 		free_arr_str(args);
 	}
 }
-
 void	child_process(int i, t_pipex p, char *command, char *envp[])
 {
 	dup2(p.prev_fd, STDIN_FILENO);

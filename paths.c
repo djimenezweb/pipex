@@ -1,17 +1,19 @@
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path.c                                             :+:      :+:    :+:   */
+/*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 10:19:41 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 13:17:11 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:04:30 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
 
+/* Iterates through env pointer and returns the PATH string
+(without the "PATH=" prefix)*/
 char	*get_path_env(char *envp[])
 {
 	char	*path;
