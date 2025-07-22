@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/22 11:55:43 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/22 12:00:05 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -53,15 +53,15 @@ void	child_process(int i, t_pipex ctx, char *command, char *envp[])
 	run_command(command, ctx, envp);
 }
 
-t_pipex	init_structure(int argc, char *argv[], char *envp[])
+t_pipex	init_context(int argc, char *argv[], char *envp[])
 {
-	t_pipex	p;
+	t_pipex	ctx;
 
-	p.loops = argc - 3;
-	p.prev_fd = open_input(argv[1]);
-	p.output_fd = open_output(argv[argc - 1]);
-	p.paths = ft_split(get_path_env(envp), ':');
-	return (p);
+	ctx.loops = argc - 3;
+	ctx.prev_fd = open_input(argv[1]);
+	ctx.output_fd = open_output(argv[argc - 1]);
+	ctx.paths = ft_split(get_path_env(envp), ':');
+	return (ctx);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -73,7 +73,7 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc < 5)
 		return (0);
 	i = 0;
-	ctx = init_structure(argc, argv, envp);
+	ctx = init_context(argc, argv, envp);
 	while (i < ctx.loops)
 	{
 		// Create pipe except on last iteration
