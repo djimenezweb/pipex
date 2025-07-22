@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/21 17:29:57 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/22 11:44:16 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -44,10 +44,10 @@ void	child_process(int i, t_pipex p, char *command, char *envp[])
 	if (is_last(i, p.loops))
 		dup2(p.output_fd, STDOUT_FILENO);
 	else
-		dup2(p.fd[1], STDOUT_FILENO);
+		dup2(p.pipefd[1], STDOUT_FILENO);
 	close(p.prev_fd);
-	close(p.fd[0]);
-	close(p.fd[1]);
+	close(p.pipefd[0]);
+	close(p.pipefd[1]);
 	if (is_last(i, p.loops))
 		close(p.output_fd);
 	run_command(command, p, envp);
@@ -77,7 +77,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (i < p.loops)
 	{
 		// Create pipe except on last iteration
-		if (!is_last(i, p.loops) && pipe(p.fd) == -1)
+		if (!is_last(i, p.loops) && pipe(p.pipefd) == -1)
 			return (1);
 		pid = fork();
 		// CHILD PROCESS
@@ -90,8 +90,8 @@ int	main(int argc, char *argv[], char *envp[])
 		}
 		// PARENT
 		close(p.prev_fd);
-		close(p.fd[1]);
-		p.prev_fd = p.fd[0];
+		close(p.pipefd[1]);
+		p.prev_fd = p.pipefd[0];
 		i++;
 	}
 	wait_chidren(p.loops);
