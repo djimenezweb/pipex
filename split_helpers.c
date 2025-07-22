@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 11:52:20 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/22 14:27:03 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/22 14:56:16 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -39,6 +39,7 @@ char	*split_command(char *str)
 	return (ft_substr(str, start, len));
 }
 
+/* TO DO: Do we need this funcion? */
 char	*split_args(char *str)
 {
 	int		start;

@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/22 14:33:12 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/22 15:06:34 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -29,21 +29,26 @@ typedef struct s_pipex
 	char	**paths;
 }			t_pipex;
 
-// paths.c
+// init_context.c
 char	*get_path_env(char *envp[]);
+int		open_infile(char *path);
+int		open_outfile(char *path);
+t_pipex	init_context(int argc, char *argv[], char *envp[]);
+
+// paths.c
 char	*path(char *str, char **paths);
 
 // pipex_helpers.c
+int		is_last(int i, int count);
 void	wait_chidren(int count);
-int		open_infile(char *path);
-int		open_outfile(char *path);
 void	free_arr_str(char **arr);
 
 // pipex.c
-int		is_last(int i, int count);
+// int	main(int argc, char *argv[], char *envp[])
+
+// run_child.c
 void	run_command(char *str, t_pipex ctx, char *envp[]);
 void	run_pipeline_child(int i, t_pipex ctx, char *str, char *envp[]);
-t_pipex	init_context(int argc, char *argv[], char *envp[]);
 
 // split_helpers.c
 char	*split_command(char *str);

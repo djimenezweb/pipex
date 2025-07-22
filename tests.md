@@ -1,6 +1,8 @@
 TESTS
 
 1. Comandos normales
+Count how many lines are in input.txt, and write that number to out1_shell.txt.
+NOTE: It counts the number of **newline characters**, not the number of visible lines or text blocks.
 ./pipex input.txt "cat" "wc -l" out1.txt 2> errores1.txt
 < input.txt cat | wc -l > out1_shell.txt 2> errores1_shell.txt
 

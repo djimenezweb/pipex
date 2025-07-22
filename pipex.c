@@ -6,73 +6,11 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/22 14:49:30 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/22 14:55:26 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
-
-/* Returns `1` if the current loop is the last one. Returns `0` otherwise. */
-int	is_last(int i, int count)
-{
-	if (i == count - 1)
-		return (1);
-	return (0);
-}
-
-/* Takes a string that represents a command and executes it.*/
-void	run_command(char *str, t_pipex ctx, char *envp[])
-{
-	char	*command;
-	char	*pathname;
-	char	**args;
-
-	// Parse and execute command
-	command = split_command(str);
-	args = ft_split(str, ' ');
-	//args = split_args(argv);
-	pathname = path(command, ctx.paths);
-	// If execve fails you should return exit(127) or similar
-	if (execve(pathname, args, envp) == -1)
-	{
-		free(command);
-		free(pathname);
-		free_arr_str(args);
-	}
-}
-/* Sets up input/output redirection for a child process in a pipeline
-and executes a command. */
-void	run_pipeline_child(int i, t_pipex ctx, char *command, char *envp[])
-{
-	dup2(ctx.prev_fd, STDIN_FILENO);
-	if (is_last(i, ctx.loops))
-		dup2(ctx.outfile_fd, STDOUT_FILENO);
-	else
-		dup2(ctx.pipefd[1], STDOUT_FILENO);
-	close(ctx.prev_fd);
-	close(ctx.pipefd[0]);
-	close(ctx.pipefd[1]);
-	if (is_last(i, ctx.loops))
-		close(ctx.outfile_fd);
-	run_command(command, ctx, envp);
-}
-
-/* Initializes a `t_pipex` context and returns it.
-- `loops`: Number of commands.
-- `prev_fd`: File descriptor from the previous file
-(on first iteration, file descriptor for the input file).
-- `outfile_fd`: File descriptor for the output file.
-- `paths`: An array of directories to look for executable files.*/
-t_pipex	init_context(int argc, char *argv[], char *envp[])
-{
-	t_pipex	ctx;
-
-	ctx.loops = argc - 3;
-	ctx.prev_fd = open_infile(argv[1]);
-	ctx.outfile_fd = open_outfile(argv[argc - 1]);
-	ctx.paths = ft_split(get_path_env(envp), ':');
-	return (ctx);
-}
 
 int	main(int argc, char *argv[], char *envp[])
 {
