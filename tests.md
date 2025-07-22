@@ -31,8 +31,9 @@ Count how many lines are in `input.txt`, and write that number to `output.txt`.
 ### 4. Directorio de outfile inexistente
 ```
 ./pipex input.txt "cat" "wc" missingdir/output_pipex.txt
-{ < input.txt cat | wc > missingdir/output_pipex.txt; }
+{ < input.txt cat | wc > missingdir/output_shell.txt; }
 ```
+
 ### 5. No hay argumentos
 ```
 ./pipex > output_pipex.txt
@@ -66,7 +67,6 @@ Count how many lines are in `input.txt`, and write that number to `output.txt`.
 ### 10. Outfile sin permisos
 ```
 ./pipex input.txt "cat" "wc -l" out_no.txt
-
 < input.txt (cat | wc -l > out_no.txt)
 ```
 
@@ -96,21 +96,19 @@ Count how many lines are in `input.txt`, and write that number to `output.txt`.
 
 ### 15. Outfile no creado
 ```
-./pipex input.txt "cat" "wc -l" out2.txt
-
-( < input.txt cat | wc -l ) > out2_shell.txt 
+./pipex input.txt "cat" "wc -l" output_pipex.txt
+( < input.txt cat | wc -l ) > output_shell.txt
 ```
 
-### 16. Comandos vacío + Outfile no existe
+### 16. Comandos vacíos + Outfile no existe
 ```
- ./pipex input.txt "" "" out3.txt
-
-( < input.txt "" | "" ) > out3_shell.txt
+ ./pipex input.txt "" "" output_pipex.txt
+( < input.txt "" | "" ) > output_shell.txt
 ```
 
 ### 17. Ambos archivos incorrectos
 ```
 ./pipex inpu.txt "/bin/" "wc -l" out/output_pipex.txt
- ({ < nofile.txt cat | wc; } > out/output_shell.txt) 2> errores1_shell
+ ({ < nofile.txt cat | wc; } > out/output_shell.txt)
  ```
  
