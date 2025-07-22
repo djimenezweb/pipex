@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/22 14:33:08 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/22 14:49:30 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -59,7 +59,8 @@ void	run_pipeline_child(int i, t_pipex ctx, char *command, char *envp[])
 
 /* Initializes a `t_pipex` context and returns it.
 - `loops`: Number of commands.
-- `prev_fd`
+- `prev_fd`: File descriptor from the previous file
+(on first iteration, file descriptor for the input file).
 - `outfile_fd`: File descriptor for the output file.
 - `paths`: An array of directories to look for executable files.*/
 t_pipex	init_context(int argc, char *argv[], char *envp[])
