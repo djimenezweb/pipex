@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/22 12:52:45 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/22 14:33:12 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -42,7 +42,7 @@ void	free_arr_str(char **arr);
 // pipex.c
 int		is_last(int i, int count);
 void	run_command(char *str, t_pipex ctx, char *envp[]);
-void	child_process(int i, t_pipex ctx, char *str, char *envp[]);
+void	run_pipeline_child(int i, t_pipex ctx, char *str, char *envp[]);
 t_pipex	init_context(int argc, char *argv[], char *envp[]);
 
 // split_helpers.c

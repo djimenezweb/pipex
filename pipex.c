@@ -6,13 +6,13 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/22 12:58:18 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/22 14:33:08 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
 
-/* Returns `1` if the current loop is the last one. Otherwise returns `0`. */
+/* Returns `1` if the current loop is the last one. Returns `0` otherwise. */
 int	is_last(int i, int count)
 {
 	if (i == count - 1)
@@ -20,6 +20,7 @@ int	is_last(int i, int count)
 	return (0);
 }
 
+/* Takes a string that represents a command and executes it.*/
 void	run_command(char *str, t_pipex ctx, char *envp[])
 {
 	char	*command;
@@ -39,7 +40,9 @@ void	run_command(char *str, t_pipex ctx, char *envp[])
 		free_arr_str(args);
 	}
 }
-void	child_process(int i, t_pipex ctx, char *command, char *envp[])
+/* Sets up input/output redirection for a child process in a pipeline
+and executes a command. */
+void	run_pipeline_child(int i, t_pipex ctx, char *command, char *envp[])
 {
 	dup2(ctx.prev_fd, STDIN_FILENO);
 	if (is_last(i, ctx.loops))
@@ -88,7 +91,7 @@ int	main(int argc, char *argv[], char *envp[])
 		pid = fork();
 		// CHILD PROCESS
 		if (pid == 0)
-			child_process(i, ctx, argv[i + 2], envp);
+			run_pipeline_child(i, ctx, argv[i + 2], envp);
 		else if (pid < 0)
 		{
 			// Handle errors
