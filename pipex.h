@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/22 12:02:35 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/22 12:52:45 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -24,7 +24,7 @@ typedef struct s_pipex
 {
 	int		loops;
 	int		prev_fd;
-	int		output_fd;
+	int		outfile_fd;
 	int		pipefd[2];
 	char	**paths;
 }			t_pipex;
@@ -35,8 +35,8 @@ char	*path(char *str, char **paths);
 
 // pipex_helpers.c
 void	wait_chidren(int count);
-int		open_input(char *path);
-int		open_output(char *path);
+int		open_infile(char *path);
+int		open_outfile(char *path);
 void	free_arr_str(char **arr);
 
 // pipex.c

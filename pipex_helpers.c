@@ -6,12 +6,13 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:23:32 by danielji          #+#    #+#             */
-/*   Updated: 2025/06/25 11:28:53 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/22 12:49:10 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
 
+/* Waits for the specified number of child processes to finish. */
 void	wait_chidren(int count)
 {
 	int	i;
@@ -24,7 +25,9 @@ void	wait_chidren(int count)
 	}
 }
 
-int	open_input(char *path)
+/* Opens the specified file in read-only mode
+and returns its file descriptor. */
+int	open_infile(char *path)
 {
 	int	fd;
 
@@ -36,7 +39,10 @@ int	open_input(char *path)
 	return (fd);
 }
 
-int	open_output(char *path)
+/* Opens the file at the given path for writing.
+Creates the file if it doesn't exist and erases content if it does.
+Returns the file descriptor. */
+int	open_outfile(char *path)
 {
 	int	fd;
 
@@ -48,6 +54,7 @@ int	open_output(char *path)
 	return (fd);
 }
 
+/* Frees each string in an array of strings and the array itself. */
 void	free_arr_str(char **arr)
 {
 	int	i;
