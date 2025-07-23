@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/23 12:18:38 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/23 12:56:48 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -37,7 +37,7 @@ int	open_infile(char *path)
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_printf("pipex: no such file or directory: %s", path);
+		ft_printf("pipex: no such file or directory: %s\n", path);
 	}
 	return (fd);
 }
@@ -68,8 +68,9 @@ t_pipex	init_context(int argc, char *argv[], char *envp[])
 	t_pipex	ctx;
 
 	ctx.loops = argc - 3;
-	ctx.prev_fd = open_infile(argv[1]);
 	ctx.outfile_fd = open_outfile(argv[argc - 1]);
+	ctx.infile_fd = open_infile(argv[1]);
+	ctx.prev_fd = ctx.infile_fd;
 	ctx.paths = ft_split(get_path_env(envp), ':');
 	return (ctx);
 }

@@ -6,11 +6,20 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/23 12:15:09 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/23 13:01:51 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
+
+static void advance_pipeline(t_pipex *ctx, int *i)
+{
+	close(ctx->prev_fd);
+	close(ctx->pipefd[1]);
+	ctx->prev_fd = ctx->pipefd[0];
+	(*i)++;
+}
+
 
 /* - Initializes context
 - Creates a pipe except on last iteration
@@ -33,23 +42,22 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		if (!is_last(i, ctx.loops) && pipe(ctx.pipefd) == -1)
 			return (1);
-		if (ctx.prev_fd > 0)
+		if (i == 0 && ctx.infile_fd < 0)
 		{
-			pid = fork();
-			// CHILD PROCESS
-			if (pid == 0)
-				run_pipeline_child(i, ctx, argv[i + 2], envp);
-			else if (pid < 0)
-			{
-				// Handle errors
-				return (2);
-			}
+			advance_pipeline(&ctx, &i);
+			continue;
+		}
+		pid = fork();
+		// CHILD PROCESS
+		if (pid == 0)
+			run_pipeline_child(i, ctx, argv[i + 2], envp);
+		else if (pid < 0)
+		{
+			// Handle errors
+			return (2);
 		}
 		// PARENT
-		close(ctx.prev_fd);
-		close(ctx.pipefd[1]);
-		ctx.prev_fd = ctx.pipefd[0];
-		i++;
+		advance_pipeline(&ctx, &i);
 	}
 	wait_chidren(ctx.loops);
 	free_arr_str(ctx.paths);

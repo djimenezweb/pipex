@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/23 09:39:58 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/23 12:32:05 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -23,8 +23,9 @@
 typedef struct s_pipex
 {
 	int		loops;
-	int		prev_fd;
+	int		infile_fd;
 	int		outfile_fd;
+	int		prev_fd;
 	int		pipefd[2];
 	char	**paths;
 }			t_pipex;
