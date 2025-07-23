@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 10:19:41 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/23 09:57:34 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/23 10:07:31 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -15,7 +15,7 @@
 /* Returns the first valid path to an executable file.
 - Returns the provided string if it's already a valid path.
 - Adds a `/` prefix only if it's missing.
-- TO DO: Should check `.sh` files. */
+- TO DO: Should check `.sh` files??? */
 char	*get_command_path(char *cmd, char **paths)
 {
 	int		i;
