@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:55:28 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/22 14:55:43 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/23 09:34:35 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -23,7 +23,7 @@ void	run_command(char *str, t_pipex ctx, char *envp[])
 	command = split_command(str);
 	args = ft_split(str, ' ');
 	//args = split_args(argv);
-	pathname = path(command, ctx.paths);
+	pathname = get_command_path(command, ctx.paths);
 	// If execve fails you should return exit(127) or similar
 	if (execve(pathname, args, envp) == -1)
 	{
