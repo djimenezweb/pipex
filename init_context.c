@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/23 11:23:14 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/23 12:18:38 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -38,7 +38,6 @@ int	open_infile(char *path)
 	if (fd == -1)
 	{
 		ft_printf("pipex: no such file or directory: %s", path);
-		// Manage errors
 	}
 	return (fd);
 }
