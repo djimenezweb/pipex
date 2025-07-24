@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   run_child.c                                        :+:      :+:    :+:   */
@@ -8,23 +8,24 @@
 /*   Created: 2025/07/22 14:55:28 by danielji          #+#    #+#             */
 /*   Updated: 2025/07/23 09:34:35 by danielji         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "pipex.h"
 
-/* Takes a string that represents a command and executes it.*/
+/* Takes a string that represents a command and executes it.
+If execve fails you should return exit(127) or similar
+How to deal with arguments?
+	args = ft_split(str, ' ');
+	args = split_args(argv); */
 void	run_command(char *str, t_pipex ctx, char *envp[])
 {
 	char	*command;
 	char	*pathname;
 	char	**args;
 
-	// Parse and execute command
 	command = split_command(str);
 	args = ft_split(str, ' ');
-	//args = split_args(argv);
 	pathname = get_command_path(command, ctx.paths);
-	// If execve fails you should return exit(127) or similar
 	if (execve(pathname, args, envp) == -1)
 	{
 		free(command);
