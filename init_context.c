@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/23 12:56:48 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/24 16:21:29 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -52,7 +52,10 @@ int	open_outfile(char *path)
 	fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		// Manage errors
+		if (!access(path, F_OK) && access(path, W_OK) < 0)
+			ft_printf("pipex: Permission denied: %s\n", path);
+		else
+			ft_printf("pipex: no such file or directory: %s\n", path);
 	}
 	return (fd);
 }
