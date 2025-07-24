@@ -12,6 +12,15 @@
 
 #include "pipex.h"
 
+/* Waits for children, frees allocated memory, closes open file descriptors. */
+void	pipex_cleanup(t_pipex ctx)
+{
+	wait_chidren(ctx.loops);
+	free_arr_str(ctx.paths);
+	close(ctx.pipefd[0]);
+	close(ctx.outfile_fd);
+}
+
 static void	advance_pipeline(t_pipex *ctx, int *i)
 {
 	close(ctx->prev_fd);
@@ -60,9 +69,6 @@ int	main(int argc, char *argv[], char *envp[])
 		// PARENT
 		advance_pipeline(&ctx, &i);
 	}
-	wait_chidren(ctx.loops);
-	free_arr_str(ctx.paths);
-	close(ctx.pipefd[0]);
-	close(ctx.outfile_fd);
+	pipex_cleanup(ctx);
 	return (0);
 }

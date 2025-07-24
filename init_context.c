@@ -37,7 +37,7 @@ int	open_infile(char *path)
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_printf("pipex: no such file or directory: %s\n", path);
+		ft_printf_fd(STDOUT_FILENO, "pipex: no such file or directory: %s\n", path);
 	}
 	return (fd);
 }
@@ -53,9 +53,9 @@ int	open_outfile(char *path)
 	if (fd == -1)
 	{
 		if (!access(path, F_OK) && access(path, W_OK) < 0)
-			ft_printf("pipex: Permission denied: %s\n", path);
+			ft_printf_fd(STDERR_FILENO, "pipex: Permission denied: %s\n", path);
 		else
-			ft_printf("pipex: no such file or directory: %s\n", path);
+			ft_printf_fd(STDERR_FILENO, "pipex: no such file or directory: %s\n", path);
 	}
 	return (fd);
 }
