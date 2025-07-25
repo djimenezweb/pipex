@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   init_context.c                                     :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/24 16:21:29 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 10:27:00 by danielji         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "pipex.h"
 
@@ -37,7 +37,7 @@ int	open_infile(char *path)
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_printf_fd(STDOUT_FILENO, "pipex: no such file or directory: %s\n", path);
+		printwarn(ENOENT, path);
 	}
 	return (fd);
 }
@@ -53,19 +53,40 @@ int	open_outfile(char *path)
 	if (fd == -1)
 	{
 		if (!access(path, F_OK) && access(path, W_OK) < 0)
-			ft_printf_fd(STDERR_FILENO, "pipex: Permission denied: %s\n", path);
+			printerror(EACCES, path);
 		else
-			ft_printf_fd(STDERR_FILENO, "pipex: no such file or directory: %s\n", path);
+			printerror(ENOENT, path);
 	}
 	return (fd);
 }
+
+/* char	**parse_commands(int count, char *argv[], char *paths[])
+{
+	int		i;
+	char	**commands;
+
+	commands = malloc(sizeof(char*) * (count + 1));
+	if (!commands)
+		return (NULL);
+	i = 0;
+	while(i < count)
+	{
+		commands[i] = get_command_path(argv[i + 2], paths);
+		// handle malloc error
+		i++;
+	}
+	commands[i] = NULL;
+	return (commands);
+} */
 
 /* Initializes a `t_pipex` context and returns it.
 - `loops`: Number of commands.
 - `prev_fd`: File descriptor from the previous file
 (on first iteration, file descriptor for the input file).
 - `outfile_fd`: File descriptor for the output file.
-- `paths`: An array of directories to look for executable files.*/
+- `paths`: An array of directories to look for executable files.
+- `envp`: A reference to the original `envp`.
+*/
 t_pipex	init_context(int argc, char *argv[], char *envp[])
 {
 	t_pipex	ctx;
@@ -75,5 +96,6 @@ t_pipex	init_context(int argc, char *argv[], char *envp[])
 	ctx.infile_fd = open_infile(argv[1]);
 	ctx.prev_fd = ctx.infile_fd;
 	ctx.paths = ft_split(get_path_env(envp), ':');
+	ctx.envp = envp;
 	return (ctx);
 }

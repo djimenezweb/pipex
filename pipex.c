@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/24 16:29:06 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 09:36:32 by danielji         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "pipex.h"
 
@@ -21,7 +21,7 @@ void	pipex_cleanup(t_pipex ctx)
 	close(ctx.outfile_fd);
 }
 
-static void	advance_pipeline(t_pipex *ctx, int *i)
+static void	advance_pipeline(int *i, t_pipex *ctx)
 {
 	close(ctx->prev_fd);
 	close(ctx->pipefd[1]);
@@ -54,20 +54,26 @@ int	main(int argc, char *argv[], char *envp[])
 			return (1);
 		if (i == 0 && ctx.infile_fd < 0)
 		{
-			advance_pipeline(&ctx, &i);
+			advance_pipeline(&i, &ctx);
 			continue ;
 		}
 		pid = fork();
-		// CHILD PROCESS
 		if (pid == 0)
-			run_pipeline_child(i, ctx, argv[i + 2], envp);
+		{
+			// CHILD PROCESS
+			run_pipeline_child(i, ctx, argv[i + 2]);
+		}
 		else if (pid < 0)
 		{
+			// PARENT (ERRORS)
 			// Handle errors
 			return (2);
 		}
-		// PARENT
-		advance_pipeline(&ctx, &i);
+		else if (pid > 0)
+		{
+			// PARENT
+			advance_pipeline(&i, &ctx);
+		}
 	}
 	pipex_cleanup(ctx);
 	return (0);

@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/23 12:32:05 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 10:28:30 by danielji         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef PIPEX_H
 # define PIPEX_H
@@ -19,6 +19,8 @@
 # include <limits.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+# include <string.h>
+# include <errno.h>
 
 typedef struct s_pipex
 {
@@ -28,6 +30,7 @@ typedef struct s_pipex
 	int		prev_fd;
 	int		pipefd[2];
 	char	**paths;
+	char	**envp;
 }			t_pipex;
 
 char	*get_path_env(char *envp[]);
@@ -41,10 +44,13 @@ int		is_last(int i, int count);
 void	wait_chidren(int count);
 void	free_arr_str(char **arr);
 
-void	run_command(char *str, t_pipex ctx, char *envp[]);
-void	run_pipeline_child(int i, t_pipex ctx, char *str, char *envp[]);
+void	run_command(char *str, t_pipex ctx);
+void	run_pipeline_child(int i, t_pipex ctx, char *command);
 
 char	*split_command(char *str);
 char	*split_args(char *str);
+
+void	printerror(int errnum, char *str);
+void	printwarn(int errnum, char *str);
 
 #endif
