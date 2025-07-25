@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 10:59:11 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 11:31:56 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -29,7 +29,8 @@ char	*get_path_env(char *envp[])
 }
 
 /* Opens the specified file in read-only mode
-and returns its file descriptor. */
+and returns its file descriptor.
+On error it prints a warning but still returns the fd. */
 int	open_infile(char *path)
 {
 	int	fd;
@@ -44,7 +45,8 @@ int	open_infile(char *path)
 
 /* Opens the file at the given path for writing.
 Creates the file if it doesn't exist and erases content if it does.
-Returns the file descriptor. */
+Returns the file descriptor.
+Exits program on error (access not allowed, not valid directory). */
 int	open_outfile(char *path)
 {
 	int	fd;

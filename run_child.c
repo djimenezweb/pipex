@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:55:28 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 11:02:18 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 11:34:49 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -34,8 +34,9 @@ void	run_command(char *str, t_pipex ctx)
 	}
 }
 
-/* Sets up input/output redirection for a child process in a pipeline
-and executes a command. */
+/* - Sets up input/output redirection for a child process in a pipeline.
+- Closes open file descriptors.
+- Executes the command. */
 void	run_pipeline_child(int i, t_pipex ctx)
 {
 	dup2(ctx.prev_fd, STDIN_FILENO);
