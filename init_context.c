@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 10:27:00 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 10:52:05 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -56,6 +56,7 @@ int	open_outfile(char *path)
 			printerror(EACCES, path);
 		else
 			printerror(ENOENT, path);
+		exit(1);
 	}
 	return (fd);
 }

@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 09:36:32 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 10:52:46 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -29,6 +29,29 @@ static void	advance_pipeline(int *i, t_pipex *ctx)
 	(*i)++;
 }
 
+void	fork_process(int *i, t_pipex *ctx, char *argv[])
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		// CHILD PROCESS
+		run_pipeline_child(*i, *ctx, argv[*i + 2]);
+	}
+	else if (pid < 0)
+	{
+		// PARENT (ERRORS)
+		// Handle errors
+		// return (2);
+	}
+	else if (pid > 0)
+	{
+		// PARENT
+		advance_pipeline(i, ctx);
+	}
+}
+
 /* - Initializes context
 - Creates a pipe except on last iteration
 - Creates a new process with `fork()`
@@ -40,14 +63,11 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	int		i;
 	t_pipex	ctx;
-	pid_t	pid;
 
 	if (argc < 5)
 		return (0);
 	i = 0;
 	ctx = init_context(argc, argv, envp);
-	if (ctx.outfile_fd < 0)
-		return (1);
 	while (i < ctx.loops)
 	{
 		if (!is_last(i, ctx.loops) && pipe(ctx.pipefd) == -1)
@@ -57,23 +77,7 @@ int	main(int argc, char *argv[], char *envp[])
 			advance_pipeline(&i, &ctx);
 			continue ;
 		}
-		pid = fork();
-		if (pid == 0)
-		{
-			// CHILD PROCESS
-			run_pipeline_child(i, ctx, argv[i + 2]);
-		}
-		else if (pid < 0)
-		{
-			// PARENT (ERRORS)
-			// Handle errors
-			return (2);
-		}
-		else if (pid > 0)
-		{
-			// PARENT
-			advance_pipeline(&i, &ctx);
-		}
+		fork_process(&i, &ctx, argv);
 	}
 	pipex_cleanup(ctx);
 	return (0);
