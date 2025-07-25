@@ -6,13 +6,15 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 11:02:18 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 11:20:35 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
 
-/* Waits for children, frees allocated memory, closes open file descriptors. */
+/* - Waits for children
+- Frees allocated memory
+- Closes open file descriptors */
 void	pipex_cleanup(t_pipex ctx)
 {
 	wait_chidren(ctx.loops);
@@ -21,6 +23,9 @@ void	pipex_cleanup(t_pipex ctx)
 	close(ctx.outfile_fd);
 }
 
+/* - Closes open file descriptors
+- The output of the previous command becomes the input of the next
+- Advances `i` */
 static void	advance_pipeline(int *i, t_pipex *ctx)
 {
 	close(ctx->prev_fd);
@@ -29,6 +34,10 @@ static void	advance_pipeline(int *i, t_pipex *ctx)
 	(*i)++;
 }
 
+/* Creates a new process
+- The child runs the command
+- The parent closes file descriptors
+- Calls `advance_pipeline` */
 void	fork_process(int *i, t_pipex *ctx)
 {
 	pid_t	pid;
@@ -52,13 +61,12 @@ void	fork_process(int *i, t_pipex *ctx)
 	}
 }
 
-/* - Initializes context
+/* Initializes context. For each command:
 - Creates a pipe except on last iteration
-- Creates a new process with `fork()`
-- The child runs the command
-- The parent closes file descriptors
-- The output of the previous command becomes the input of the next.
-- Outside the loop, the parent waits */
+- If there is no infile on first iteration, skips to next command
+- Calls `fork_process` to create a new process
+
+Once the loop is finished, the parent calls `cleanup`*/
 int	main(int argc, char *argv[], char *envp[])
 {
 	int		i;
