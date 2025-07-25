@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 11:20:35 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 12:28:07 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -19,18 +19,20 @@ void	pipex_cleanup(t_pipex ctx)
 {
 	wait_chidren(ctx.loops);
 	free_arr_str(ctx.paths);
-	close(ctx.pipefd[0]);
+	//close(ctx.pipefd[0]);
 	close(ctx.outfile_fd);
 }
 
 /* - Closes open file descriptors
+- On last iteration only `prev_fd` is closed because no pipe is created
 - The output of the previous command becomes the input of the next
 - Advances `i` */
 static void	advance_pipeline(int *i, t_pipex *ctx)
 {
 	close(ctx->prev_fd);
 	close(ctx->pipefd[1]);
-	ctx->prev_fd = ctx->pipefd[0];
+	if (!is_last(*i, ctx->loops))
+		ctx->prev_fd = ctx->pipefd[0];
 	(*i)++;
 }
 

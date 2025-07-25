@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:55:28 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 11:34:49 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 11:43:18 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -31,6 +31,7 @@ void	run_command(char *str, t_pipex ctx)
 		free(command);
 		free(pathname);
 		free_arr_str(args);
+		exit(127);
 	}
 }
 
