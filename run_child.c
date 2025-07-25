@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:55:28 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 09:28:01 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 11:02:18 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -36,7 +36,7 @@ void	run_command(char *str, t_pipex ctx)
 
 /* Sets up input/output redirection for a child process in a pipeline
 and executes a command. */
-void	run_pipeline_child(int i, t_pipex ctx, char *command)
+void	run_pipeline_child(int i, t_pipex ctx)
 {
 	dup2(ctx.prev_fd, STDIN_FILENO);
 	if (is_last(i, ctx.loops))
@@ -48,5 +48,5 @@ void	run_pipeline_child(int i, t_pipex ctx, char *command)
 	close(ctx.pipefd[1]);
 	if (is_last(i, ctx.loops))
 		close(ctx.outfile_fd);
-	run_command(command, ctx);
+	run_command(ctx.argv[i +2], ctx);
 }

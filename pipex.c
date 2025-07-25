@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 10:52:46 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 11:02:18 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -29,7 +29,7 @@ static void	advance_pipeline(int *i, t_pipex *ctx)
 	(*i)++;
 }
 
-void	fork_process(int *i, t_pipex *ctx, char *argv[])
+void	fork_process(int *i, t_pipex *ctx)
 {
 	pid_t	pid;
 
@@ -37,7 +37,7 @@ void	fork_process(int *i, t_pipex *ctx, char *argv[])
 	if (pid == 0)
 	{
 		// CHILD PROCESS
-		run_pipeline_child(*i, *ctx, argv[*i + 2]);
+		run_pipeline_child(*i, *ctx);
 	}
 	else if (pid < 0)
 	{
@@ -77,7 +77,7 @@ int	main(int argc, char *argv[], char *envp[])
 			advance_pipeline(&i, &ctx);
 			continue ;
 		}
-		fork_process(&i, &ctx, argv);
+		fork_process(&i, &ctx);
 	}
 	pipex_cleanup(ctx);
 	return (0);

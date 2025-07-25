@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 10:28:30 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 11:02:18 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -30,6 +30,7 @@ typedef struct s_pipex
 	int		prev_fd;
 	int		pipefd[2];
 	char	**paths;
+	char	**argv;
 	char	**envp;
 }			t_pipex;
 
@@ -45,7 +46,7 @@ void	wait_chidren(int count);
 void	free_arr_str(char **arr);
 
 void	run_command(char *str, t_pipex ctx);
-void	run_pipeline_child(int i, t_pipex ctx, char *command);
+void	run_pipeline_child(int i, t_pipex ctx);
 
 char	*split_command(char *str);
 char	*split_args(char *str);

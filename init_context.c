@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 10:52:05 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/25 10:59:11 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -86,8 +86,8 @@ int	open_outfile(char *path)
 (on first iteration, file descriptor for the input file).
 - `outfile_fd`: File descriptor for the output file.
 - `paths`: An array of directories to look for executable files.
-- `envp`: A reference to the original `envp`.
-*/
+- `argv`: A reference to the original `argv`.
+- `envp`: A reference to the original `envp`. */
 t_pipex	init_context(int argc, char *argv[], char *envp[])
 {
 	t_pipex	ctx;
@@ -97,6 +97,7 @@ t_pipex	init_context(int argc, char *argv[], char *envp[])
 	ctx.infile_fd = open_infile(argv[1]);
 	ctx.prev_fd = ctx.infile_fd;
 	ctx.paths = ft_split(get_path_env(envp), ':');
+	ctx.argv = argv;
 	ctx.envp = envp;
 	return (ctx);
 }
