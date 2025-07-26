@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 22:57:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/24 17:25:03 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/26 16:55:00 by danielji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static ssize_t	ft_puthex_r_fd(int fd, uintptr_t num, char *base)
 
 /* Writes an unsigned int number as hexadecimal.
 Returns number of characters written*/
-ssize_t	ft_puthex_int_r_fd(int fd, unsigned int num, char *base)
+ssize_t	ft_puthex_irfd(int fd, unsigned int num, char *base)
 {
 	return (ft_puthex_r_fd(fd, (uintptr_t)num, base));
 }

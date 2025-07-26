@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 17:12:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/24 17:27:43 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/26 16:55:00 by danielji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ static ssize_t	ft_putargument_fd(int fd, char c, va_list	arg_ptr)
 	else if (c == 'u')
 		return (ft_putnbr_u_r_fd(fd, va_arg(arg_ptr, unsigned int)));
 	else if (c == 'x')
-		return (ft_puthex_int_r_fd(fd, va_arg(arg_ptr, int), "0123456789abcdef"));
+		return (ft_puthex_irfd(fd, va_arg(arg_ptr, int), "0123456789abcdef"));
 	else if (c == 'X')
-		return (ft_puthex_int_r_fd(fd, va_arg(arg_ptr, int), "0123456789ABCDEF"));
+		return (ft_puthex_irfd(fd, va_arg(arg_ptr, int), "0123456789ABCDEF"));
 	else if (c == 'p')
 		return (ft_putptr_r_fd(fd, va_arg(arg_ptr, void *)));
 	else
