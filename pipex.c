@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 12:28:07 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/26 10:26:48 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -63,6 +63,15 @@ void	fork_process(int *i, t_pipex *ctx)
 	}
 }
 
+/* Creates a pipe */
+void	create_pipe(t_pipex *ctx)
+{
+	if (pipe(ctx->pipefd) == -1)
+	{
+		// Handle error;
+	}
+}
+
 /* Initializes context. For each command:
 - Creates a pipe except on last iteration
 - If there is no infile on first iteration, skips to next command
@@ -80,8 +89,8 @@ int	main(int argc, char *argv[], char *envp[])
 	ctx = init_context(argc, argv, envp);
 	while (i < ctx.loops)
 	{
-		if (!is_last(i, ctx.loops) && pipe(ctx.pipefd) == -1)
-			return (1);
+		if (!is_last(i, ctx.loops))
+			create_pipe(&ctx);
 		if (i == 0 && ctx.infile_fd < 0)
 		{
 			advance_pipeline(&i, &ctx);

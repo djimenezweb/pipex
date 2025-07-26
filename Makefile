@@ -26,4 +26,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+rec: fclean all
+	@$(MAKE) --no-print-directory clean
+
+.PHONY: all clean fclean re rec
