@@ -26,7 +26,10 @@ fclean: clean
 
 re: fclean all
 
-rec: fclean all
+reset:
+	@$(MAKE) --no-print-directory re
 	@$(MAKE) --no-print-directory clean
+	@rm -f *.txt
+	@clear
 
-.PHONY: all clean fclean re rec
+.PHONY: all clean fclean re reset
