@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/26 10:26:48 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/26 16:41:42 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -36,36 +36,52 @@ static void	advance_pipeline(int *i, t_pipex *ctx)
 	(*i)++;
 }
 
-/* Creates a new process
-- The child runs the command
-- The parent closes file descriptors
-- Calls `advance_pipeline` */
+/* Don't fork process if:
+- There's no infile on first iteration
+- NOT A VALID COMMAND ????
+- Other causes?
+- Other causes? */
+int	should_skip_command(int i, t_pipex ctx)
+{
+	if (i == 0 && ctx.infile_fd < 0)
+		return (1);
+	return (0);
+}
+
+/* fork() cheatsheet:
+- `pid == 0`: child
+- `pid < 0`: parent (errors)
+- `pid > 0`: parent */
+
+/* Checks if a new process should be created.
+Creates a new process with `fork`
+- Child runs comand
+- Parent closes file descriptors */
 void	fork_process(int *i, t_pipex *ctx)
 {
 	pid_t	pid;
 
+	if (should_skip_command(*i, *ctx))
+	{
+		advance_pipeline(i, ctx);
+		return ;
+	}
 	pid = fork();
 	if (pid == 0)
-	{
-		// CHILD PROCESS
 		run_pipeline_child(*i, *ctx);
-	}
 	else if (pid < 0)
 	{
-		// PARENT (ERRORS)
 		// Handle errors
-		// return (2);
 	}
 	else if (pid > 0)
-	{
-		// PARENT
 		advance_pipeline(i, ctx);
-	}
 }
 
-/* Creates a pipe */
-void	create_pipe(t_pipex *ctx)
+/* Creates a pipe except on last iteration */
+void	create_pipe(int i, t_pipex *ctx)
 {
+	if (is_last(i, ctx->loops))
+		return ;
 	if (pipe(ctx->pipefd) == -1)
 	{
 		// Handle error;
@@ -73,11 +89,9 @@ void	create_pipe(t_pipex *ctx)
 }
 
 /* Initializes context. For each command:
-- Creates a pipe except on last iteration
-- If there is no infile on first iteration, skips to next command
+- Creates pipe
 - Calls `fork_process` to create a new process
-
-Once the loop is finished, the parent calls `cleanup`*/
+- Once the loop is finished, the parent calls `cleanup`*/
 int	main(int argc, char *argv[], char *envp[])
 {
 	int		i;
@@ -89,13 +103,7 @@ int	main(int argc, char *argv[], char *envp[])
 	ctx = init_context(argc, argv, envp);
 	while (i < ctx.loops)
 	{
-		if (!is_last(i, ctx.loops))
-			create_pipe(&ctx);
-		if (i == 0 && ctx.infile_fd < 0)
-		{
-			advance_pipeline(&i, &ctx);
-			continue ;
-		}
+		create_pipe(i, &ctx);
 		fork_process(&i, &ctx);
 	}
 	pipex_cleanup(ctx);

@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 11:02:18 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/26 16:34:13 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -45,7 +45,7 @@ int		is_last(int i, int count);
 void	wait_chidren(int count);
 void	free_arr_str(char **arr);
 
-void	run_command(char *str, t_pipex ctx);
+// void	run_command(char *str, t_pipex ctx);
 void	run_pipeline_child(int i, t_pipex ctx);
 
 char	*split_command(char *str);

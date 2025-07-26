@@ -6,26 +6,57 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:55:28 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/25 11:43:18 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/26 16:36:32 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
+
+/* - Redirects input from previous file descriptor (pipeline).
+- Redirects output to pipeline write end (except on last iteration)
+- On last iteration, redirects output to the outfile */
+static void	redirect_stdio(int i, t_pipex ctx)
+{
+	dup2(ctx.prev_fd, STDIN_FILENO);
+	if (is_last(i, ctx.loops))
+		dup2(ctx.outfile_fd, STDOUT_FILENO);
+	else
+		dup2(ctx.pipefd[1], STDOUT_FILENO);
+}
+
+/* - Closes prev_fd
+- Closes pipe fds
+- On last iteration, closes outfile fd */
+static void	close_fds(int i, t_pipex ctx)
+{
+	close(ctx.prev_fd);
+	close(ctx.pipefd[0]);
+	close(ctx.pipefd[1]);
+	if (is_last(i, ctx.loops))
+		close(ctx.outfile_fd);
+}
 
 /* Takes a string that represents a command and executes it.
 If execve fails you should return exit(127) or similar
 How to deal with arguments?
 	args = ft_split(str, ' ');
 	args = split_args(argv); */
-void	run_command(char *str, t_pipex ctx)
+
+/* - Sets up input/output redirection for a child process in a pipeline.
+- Closes open file descriptors.
+- Executes the command. */
+void	run_pipeline_child(int i, t_pipex ctx)
 {
 	char	*command;
 	char	*pathname;
 	char	**args;
 
-	command = split_command(str);
-	args = ft_split(str, ' ');
+	redirect_stdio(i, ctx);
+	close_fds(i, ctx);
+	command = split_command(ctx.argv[i +2]);
+	args = ft_split(ctx.argv[i +2], ' ');
 	pathname = get_command_path(command, ctx.paths);
+	// WHAT IF THERE'S NO COMMAND TO RUN????
 	if (execve(pathname, args, ctx.envp) == -1)
 	{
 		free(command);
@@ -33,22 +64,4 @@ void	run_command(char *str, t_pipex ctx)
 		free_arr_str(args);
 		exit(127);
 	}
-}
-
-/* - Sets up input/output redirection for a child process in a pipeline.
-- Closes open file descriptors.
-- Executes the command. */
-void	run_pipeline_child(int i, t_pipex ctx)
-{
-	dup2(ctx.prev_fd, STDIN_FILENO);
-	if (is_last(i, ctx.loops))
-		dup2(ctx.outfile_fd, STDOUT_FILENO);
-	else
-		dup2(ctx.pipefd[1], STDOUT_FILENO);
-	close(ctx.prev_fd);
-	close(ctx.pipefd[0]);
-	close(ctx.pipefd[1]);
-	if (is_last(i, ctx.loops))
-		close(ctx.outfile_fd);
-	run_command(ctx.argv[i +2], ctx);
 }
