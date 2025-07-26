@@ -5,13 +5,12 @@
 #include <string.h>
 #include <errno.h>
 #include <limits.h>
+#include "pipex.h"
 
 // Fallback in case PATH_MAX is not defined
 #ifndef PATH_MAX
 #define PATH_MAX 4096
 #endif
-
-void list_open_fds(const char *label);
 
 void list_open_fds(const char *label) {
 	const char *fd_dir = "/proc/self/fd";
@@ -25,7 +24,7 @@ void list_open_fds(const char *label) {
 	char link_path[PATH_MAX];
 	char resolved_path[PATH_MAX];
 
-	printf("\n=== Open FDs [%s] ===\n", label);
+	ft_printf_fd(STDERR_FILENO, "\n=== Open FDs [%s] ===\n", label);
 
 	while ((entry = readdir(dir)) != NULL) {
 		// Skip . and ..
@@ -38,9 +37,9 @@ void list_open_fds(const char *label) {
 		ssize_t len = readlink(link_path, resolved_path, sizeof(resolved_path) - 1);
 		if (len != -1) {
 			resolved_path[len] = '\0';
-			printf("fd %d -> %s\n", fd, resolved_path);
+			ft_printf_fd(STDERR_FILENO, "fd %d -> %s\n", fd, resolved_path);
 		} else {
-			printf("fd %d -> [unreadable] (%s)\n", fd, strerror(errno));
+			ft_printf_fd(STDERR_FILENO, "fd %d -> [unreadable] (%s)\n", fd, strerror(errno));
 		}
 	}
 
