@@ -87,13 +87,4 @@ ssize_t	ft_putnbr_u_r(unsigned int n);
 ssize_t	ft_puthex_int_r(unsigned int num, char *base);
 ssize_t	ft_putptr_r(void *ptr);
 
-// ft_printf_fd
-int		ft_printf_fd(int fd, char const *str, ...);
-ssize_t	ft_putchar_r_fd(int fd, char c);
-ssize_t	ft_putstr_r_fd(int fd, char *s);
-ssize_t	ft_putnbr_r_fd(int fd, int n);
-ssize_t	ft_putnbr_u_r_fd(int fd, unsigned int n);
-ssize_t	ft_puthex_irfd(int fd, unsigned int num, char *base);
-ssize_t	ft_putptr_r_fd(int fd, void *ptr);
-
 #endif
