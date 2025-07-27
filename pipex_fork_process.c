@@ -12,16 +12,43 @@
 
 #include "pipex.h"
 
-/* - Closes open file descriptors
-- On last iteration only `prev_fd` is closed because no pipe is created
+/* Creates a pipe except on last iteration */
+static void	create_pipe(int i, t_pipex *ctx)
+{
+	if (is_last(i, ctx->loops))
+		return ;
+	if (pipe(ctx->pipefd) == -1)
+	{
+		perror("pipex");
+		exit(EXIT_FAILURE);
+	}
+}
+
+/* All iterations:
+- Closes prev_fd WHY???
+You are already correctly closing pipefd[0] in every iteration via ctx->prev_fd.
+
+All iterations except last
+- Closes pipefd[1] (write end of pipe)
 - The output of the previous command becomes the input of the next
-- Advances `i` */
-static void	advance_pipeline(int *i, t_pipex *ctx)
+
+Last iteration:
+- No pipe was created so no need to close pipefd[0] or pipefd[1]
+- Closes outfile_fd
+- Frees allocated memory */
+static void	cleanup_parent(int *i, t_pipex *ctx)
 {
 	close(ctx->prev_fd);
-	close(ctx->pipefd[1]);
 	if (!is_last(*i, ctx->loops))
+	{
+		close(ctx->pipefd[1]);
 		ctx->prev_fd = ctx->pipefd[0];
+	}
+	else
+	{
+		close(ctx->outfile_fd);
+		free_arr_str(ctx->paths);
+	}
 	(*i)++;
 }
 
@@ -50,18 +77,17 @@ void	fork_process(int *i, t_pipex *ctx)
 {
 	pid_t	pid;
 
-	if (should_skip_command(*i, *ctx))
+	create_pipe(*i, ctx);
+	if (!should_skip_command(*i, *ctx))
 	{
-		advance_pipeline(i, ctx);
-		return ;
+		pid = fork();
+		if (pid == 0)
+			run_pipeline_child(*i, *ctx);
+		else if (pid < 0)
+		{
+			perror("pipex");
+			exit(EXIT_FAILURE);
+		}
 	}
-	pid = fork();
-	if (pid == 0)
-		run_pipeline_child(*i, *ctx);
-	else if (pid < 0)
-	{
-		// Handle errors
-	}
-	else if (pid > 0)
-		advance_pipeline(i, ctx);
+	cleanup_parent(i, ctx);
 }

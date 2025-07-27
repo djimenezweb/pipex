@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <string.h>
+# include <stdio.h>
 # include <errno.h>
 
 typedef struct s_pipex
@@ -35,8 +36,6 @@ typedef struct s_pipex
 }			t_pipex;
 
 char	*get_command_path(char *cmd, char **paths);
-void	pipex_cleanup(t_pipex ctx);
-void	create_pipe(int i, t_pipex *ctx);
 void	printerror(int errnum, char *str);
 void	printwarn(int errnum, char *str);
 void	fork_process(int *i, t_pipex *ctx);

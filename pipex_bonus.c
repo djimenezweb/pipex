@@ -26,7 +26,7 @@ int	main(int argc, char *argv[], char *envp[])
 	int		i;
 	t_pipex	ctx;
 
-	if (argc != 5)
+	if (argc < 5)
 		bad_args();
 	i = 0;
 	ctx = init_context(argc, argv, envp);

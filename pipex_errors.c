@@ -12,22 +12,35 @@
 
 #include "pipex.h"
 
+/* 	if (!str)
+		ft_printf_fd(STDERR_FILENO, "pipex: %s\n", strerror(errnum));
+	else
+		ft_printf_fd(STDERR_FILENO, "pipex: %s: %s\n", strerror(errnum), str); */
+
 /* Outputs to STDERR an error message that describes the error code
 passed in the argument `errnum` and an optional string `str`. */
 void	printerror(int errnum, char *str)
 {
-	if (!str)
-		ft_printf_fd(STDERR_FILENO, "pipex: %s\n", strerror(errnum));
-	else
-		ft_printf_fd(STDERR_FILENO, "pipex: %s: %s\n", strerror(errnum), str);
+	ft_putstr_fd("pipex: ", STDERR_FILENO);
+	ft_putstr_fd(strerror(errnum), STDERR_FILENO);
+	if (str)
+	{
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(str, STDERR_FILENO);
+	}
+	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
 /* Outputs to STDOUT an error message that describes the error code
 passed in the argument `errnum` and an optional string `str`. */
 void	printwarn(int errnum, char *str)
 {
-	if (!str)
-		ft_printf_fd(STDOUT_FILENO, "pipex: %s\n", strerror(errnum));
-	else
-		ft_printf_fd(STDOUT_FILENO, "pipex: %s: %s\n", strerror(errnum), str);
+	ft_putstr_fd("pipex: ", STDOUT_FILENO);
+	ft_putstr_fd(strerror(errnum), STDOUT_FILENO);
+	if (str)
+	{
+		ft_putstr_fd(": ", STDOUT_FILENO);
+		ft_putstr_fd(str, STDOUT_FILENO);
+	}
+	ft_putstr_fd("\n", STDOUT_FILENO);
 }

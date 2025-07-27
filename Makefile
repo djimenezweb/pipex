@@ -1,17 +1,22 @@
-NAME	= pipex
-CC		= cc
-CFLAGS	= -Wall -Werror -Wextra -I./libft
-SRC		= paths.c pipex.c pipex_cleanup.c pipex_create_pipe.c pipex_errors.c pipex_fork_process.c pipex_helpers.c pipex_init_context.c pipex_run_child.c split_helpers.c
-OBJ		= $(SRC:.c=.o)
-DEPS	= libft/libft.a
+NAME		= pipex
+NAME_BONUS	= pipex_bonus
+CC			= cc
+CFLAGS		= -Wall -Werror -Wextra -I./libft
+SRC			= pipex_errors.c pipex_fork_process.c pipex_helpers.c pipex_init_context.c pipex_run_child.c split_helpers.c
+OBJ			= $(SRC:.c=.o)
+DEPS		= libft/libft.a
 
-all: $(DEPS) $(NAME)
+all:	$(DEPS) $(NAME)
+bonus:	$(DEPS) $(NAME_BONUS)
 
 libft/libft.a:
 	@$(MAKE) --no-print-directory -C libft
 
-$(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) libft/libft.a -o $(NAME)
+$(NAME): pipex.o $(OBJ)
+	@$(CC) $(CFLAGS) pipex.o $(OBJ) libft/libft.a -o $(NAME)
+
+$(NAME_BONUS): pipex_bonus.o $(OBJ)
+	@$(CC) $(CFLAGS) pipex_bonus.o $(OBJ) libft/libft.a -o $(NAME_BONUS)
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
@@ -26,10 +31,4 @@ fclean: clean
 
 re: fclean all
 
-reset:
-	@$(MAKE) --no-print-directory re
-	@$(MAKE) --no-print-directory clean
-	@rm -f *.txt
-	@clear
-
-.PHONY: all clean fclean re reset
+.PHONY: all bonus clean fclean re

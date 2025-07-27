@@ -27,11 +27,14 @@ static void	redirect_stdio(int i, t_pipex ctx)
 /* - Closes prev_fd
 - Closes pipe fds
 - On last iteration, closes outfile fd */
-static void	close_fds(int i, t_pipex ctx)
+static void	cleanup_child(int i, t_pipex ctx)
 {
 	close(ctx.prev_fd);
-	close(ctx.pipefd[0]);
-	close(ctx.pipefd[1]);
+	if (!is_last(i, ctx.loops))
+	{
+		close(ctx.pipefd[0]);
+		close(ctx.pipefd[1]);
+	}
 	if (is_last(i, ctx.loops))
 		close(ctx.outfile_fd);
 }
@@ -52,8 +55,8 @@ void	run_pipeline_child(int i, t_pipex ctx)
 	char	**args;
 
 	redirect_stdio(i, ctx);
-	close_fds(i, ctx);
-	command = split_command(ctx.argv[i +2]);
+	cleanup_child(i, ctx);
+	command = split_command(ctx.argv[i + 2]);
 	args = ft_split(ctx.argv[i +2], ' ');
 	pathname = get_command_path(command, ctx.paths);
 	// WHAT IF THERE'S NO COMMAND TO RUN????
