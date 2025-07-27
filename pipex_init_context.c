@@ -12,10 +12,8 @@
 
 #include "pipex.h"
 
-/* Returns the first valid path to an executable file.
-- Returns the provided string if it's already a valid path.
-- Adds a `/` prefix only if it's missing.
-- TO DO: Should check `.sh` files??? */
+/* Returns the first valid path to an executable file */
+/* TO DO: Should return "" if not a valid command ????? */
 char	*get_command_path(char *cmd, char **paths)
 {
 	int		i;
@@ -41,8 +39,7 @@ char	*get_command_path(char *cmd, char **paths)
 	return (pathname);
 }
 
-/* Iterates through `envp` and returns the PATH string
-(without the "PATH=" prefix)*/
+/* Iterates through `envp` and returns the PATH string */
 char	*get_path_env(char *envp[])
 {
 	char	*path;
@@ -57,9 +54,8 @@ char	*get_path_env(char *envp[])
 	return (NULL);
 }
 
-/* Opens the specified file in read-only mode
-and returns its file descriptor.
-On error it prints a warning but still returns the fd. */
+/* Opens file in read-only and returns its fd.
+On error prints a warning but still returns the fd. */
 int	open_infile(char *path)
 {
 	int	fd;
@@ -72,10 +68,7 @@ int	open_infile(char *path)
 	return (fd);
 }
 
-/* Opens the file at the given path for writing.
-Creates the file if it doesn't exist and erases content if it does.
-Returns the file descriptor.
-Exits program on error (access not allowed, not valid directory). */
+/* Opens file for writing and returns its fd. Exits program on error */
 int	open_outfile(char *path)
 {
 	int	fd;
@@ -92,33 +85,7 @@ int	open_outfile(char *path)
 	return (fd);
 }
 
-/* char	**parse_commands(int count, char *argv[], char *paths[])
-{
-	int		i;
-	char	**commands;
-
-	commands = malloc(sizeof(char*) * (count + 1));
-	if (!commands)
-		return (NULL);
-	i = 0;
-	while(i < count)
-	{
-		commands[i] = get_command_path(argv[i + 2], paths);
-		// handle malloc error
-		i++;
-	}
-	commands[i] = NULL;
-	return (commands);
-} */
-
-/* Initializes a `t_pipex` context and returns it.
-- `loops`: Number of commands.
-- `prev_fd`: File descriptor from the previous file
-(on first iteration, file descriptor for the input file).
-- `outfile_fd`: File descriptor for the output file.
-- `paths`: An array of directories to look for executable files.
-- `argv`: A reference to the original `argv`.
-- `envp`: A reference to the original `envp`. */
+/* Initializes and returns a `t_pipex` context */
 t_pipex	init_context(int argc, char *argv[], char *envp[])
 {
 	t_pipex	ctx;

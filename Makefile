@@ -22,11 +22,11 @@ $(NAME_BONUS): pipex_bonus.o $(OBJ)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@rm -f $(OBJ)
+	@rm -f pipex.o pipex_bonus.o $(OBJ)
 	@$(MAKE) --no-print-directory -C libft clean
 
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(NAME_BONUS)
 	@$(MAKE) --no-print-directory -C libft fclean
 
 re: fclean all

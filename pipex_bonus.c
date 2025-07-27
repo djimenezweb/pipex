@@ -12,15 +12,13 @@
 
 #include "pipex.h"
 
-void	bad_args()
+/* TO DO */
+void	bad_args(void)
 {
 	ft_putendl_fd("Bad arguments", STDERR_FILENO);
 	exit(EXIT_FAILURE);
 }
 
-/* - Initializes context.
-- The loop creates a pipe, forks process and continues to next iteration
-- Once the loop is finished, it waits for all children at the end */
 int	main(int argc, char *argv[], char *envp[])
 {
 	int		i;

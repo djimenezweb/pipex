@@ -12,11 +12,9 @@
 
 #include "pipex.h"
 
-/* Creates a pipe except on last iteration */
-static void	create_pipe(int i, t_pipex *ctx)
+/* Creates a pipe. Exits program on error. */
+static void	create_pipe(t_pipex *ctx)
 {
-	if (is_last(i, ctx->loops))
-		return ;
 	if (pipe(ctx->pipefd) == -1)
 	{
 		perror("pipex");
@@ -24,18 +22,7 @@ static void	create_pipe(int i, t_pipex *ctx)
 	}
 }
 
-/* All iterations:
-- Closes prev_fd WHY???
-You are already correctly closing pipefd[0] in every iteration via ctx->prev_fd.
-
-All iterations except last
-- Closes pipefd[1] (write end of pipe)
-- The output of the previous command becomes the input of the next
-
-Last iteration:
-- No pipe was created so no need to close pipefd[0] or pipefd[1]
-- Closes outfile_fd
-- Frees allocated memory */
+/* Closes fds, assigns read end of pipe to `prev_fd` for the next iteration */
 static void	cleanup_parent(int *i, t_pipex *ctx)
 {
 	close(ctx->prev_fd);
@@ -54,9 +41,7 @@ static void	cleanup_parent(int *i, t_pipex *ctx)
 
 /* Don't fork process if:
 - There's no infile on first iteration
-- NOT A VALID COMMAND ????
-- Other causes?
-- Other causes? */
+- NOT A VALID COMMAND ???? */
 static int	should_skip_command(int i, t_pipex ctx)
 {
 	if (i == 0 && ctx.infile_fd < 0)
@@ -64,20 +49,14 @@ static int	should_skip_command(int i, t_pipex ctx)
 	return (0);
 }
 
-/* fork() cheatsheet:
-- `pid == 0`: child
-- `pid < 0`: parent (errors)
-- `pid > 0`: parent */
-
-/* Checks if a new process should be created.
-Creates a new process with `fork`
-- Child runs comand
-- Parent closes file descriptors */
+/* Creates a pipe (except on last iteration). Forks new process.
+Child runs comand, parent closes fds */
 void	fork_process(int *i, t_pipex *ctx)
 {
 	pid_t	pid;
 
-	create_pipe(*i, ctx);
+	if (!is_last(*i, ctx->loops))
+		create_pipe(ctx);
 	if (!should_skip_command(*i, *ctx))
 	{
 		pid = fork();

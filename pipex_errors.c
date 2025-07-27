@@ -12,12 +12,7 @@
 
 #include "pipex.h"
 
-/* 	if (!str)
-		ft_printf_fd(STDERR_FILENO, "pipex: %s\n", strerror(errnum));
-	else
-		ft_printf_fd(STDERR_FILENO, "pipex: %s: %s\n", strerror(errnum), str); */
-
-/* Outputs to STDERR an error message that describes the error code
+/* Outputs to `STDERR` an error message that describes the error code
 passed in the argument `errnum` and an optional string `str`. */
 void	printerror(int errnum, char *str)
 {
@@ -31,7 +26,7 @@ void	printerror(int errnum, char *str)
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
-/* Outputs to STDOUT an error message that describes the error code
+/* Outputs to `STDOUT` an error message that describes the error code
 passed in the argument `errnum` and an optional string `str`. */
 void	printwarn(int errnum, char *str)
 {

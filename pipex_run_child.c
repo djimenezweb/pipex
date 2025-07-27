@@ -12,9 +12,8 @@
 
 #include "pipex.h"
 
-/* - Redirects input from previous file descriptor (pipeline).
-- Redirects output to pipeline write end (except on last iteration)
-- On last iteration, redirects output to the outfile */
+/* Redirects input from previous fd and output to pipeline's write end.
+On last iteration, output is instead redirected to outfile */
 static void	redirect_stdio(int i, t_pipex ctx)
 {
 	dup2(ctx.prev_fd, STDIN_FILENO);
@@ -24,9 +23,7 @@ static void	redirect_stdio(int i, t_pipex ctx)
 		dup2(ctx.pipefd[1], STDOUT_FILENO);
 }
 
-/* - Closes prev_fd
-- Closes pipe fds
-- On last iteration, closes outfile fd */
+/* Closes fds. On last iteration, closes outfile fd */
 static void	cleanup_child(int i, t_pipex ctx)
 {
 	close(ctx.prev_fd);
@@ -39,15 +36,8 @@ static void	cleanup_child(int i, t_pipex ctx)
 		close(ctx.outfile_fd);
 }
 
-/* Takes a string that represents a command and executes it.
-If execve fails you should return exit(127) or similar
-How to deal with arguments?
-	args = ft_split(str, ' ');
-	args = split_args(argv); */
-
-/* - Sets up input/output redirection for a child process in a pipeline.
-- Closes open file descriptors.
-- Executes the command. */
+/* Sets up input/output redirection, closes fds, and runs the command. */
+/* TO DO: WHAT IF THERE'S NO COMMAND TO RUN???? */
 void	run_pipeline_child(int i, t_pipex ctx)
 {
 	char	*command;
@@ -59,7 +49,6 @@ void	run_pipeline_child(int i, t_pipex ctx)
 	command = split_command(ctx.argv[i + 2]);
 	args = ft_split(ctx.argv[i +2], ' ');
 	pathname = get_command_path(command, ctx.paths);
-	// WHAT IF THERE'S NO COMMAND TO RUN????
 	if (execve(pathname, args, ctx.envp) == -1)
 	{
 		free(command);
