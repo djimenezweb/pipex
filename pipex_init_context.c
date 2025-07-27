@@ -12,33 +12,6 @@
 
 #include "pipex.h"
 
-/* Returns the first valid path to an executable file */
-/* TO DO: Should return "" if not a valid command ????? */
-char	*get_command_path(char *cmd, char **paths)
-{
-	int		i;
-	char	*slash_cmd;
-	char	*pathname;
-
-	if (access(cmd, X_OK) == 0)
-		return (cmd);
-	i = 0;
-	if (!ft_strnstr(cmd, "/", 1))
-		slash_cmd = ft_strjoin("/", cmd);
-	else
-		slash_cmd = ft_strdup(cmd);
-	while (paths[i])
-	{
-		pathname = ft_strjoin(paths[i], slash_cmd);
-		if (access(pathname, X_OK) == 0)
-			break ;
-		free(pathname);
-		i++;
-	}
-	free(slash_cmd);
-	return (pathname);
-}
-
 /* Iterates through `envp` and returns the PATH string */
 char	*get_path_env(char *envp[])
 {

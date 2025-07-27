@@ -36,6 +36,36 @@ static void	cleanup_child(int i, t_pipex ctx)
 		close(ctx.outfile_fd);
 }
 
+/* Returns the first valid path to an executable file */
+/* TO DO: Should return "" if not a valid command ????? */
+char	*get_command_path(char *cmd, char **paths)
+{
+	int		i;
+	char	*slash_cmd;
+	char	*pathname;
+
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
+	i = 0;
+	if (!ft_strnstr(cmd, "/", 1))
+		slash_cmd = ft_strjoin("/", cmd);
+	else
+		slash_cmd = ft_strdup(cmd);
+	while (paths[i])
+	{
+		pathname = ft_strjoin(paths[i], slash_cmd);
+		if (access(pathname, X_OK) == 0)
+		{
+			free(slash_cmd);
+			return (pathname);
+		}
+		free(pathname);
+		i++;
+	}
+	free(slash_cmd);
+	return (ft_strdup(""));
+}
+
 /* Sets up input/output redirection, closes fds, and runs the command. */
 /* TO DO: WHAT IF THERE'S NO COMMAND TO RUN???? */
 void	run_pipeline_child(int i, t_pipex ctx)
