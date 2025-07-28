@@ -62,12 +62,17 @@ int	open_outfile(char *path)
 t_pipex	init_context(int argc, char *argv[], char *envp[])
 {
 	t_pipex	ctx;
+	char	*path;
 
+	path = get_path_env(envp);
 	ctx.loops = argc - 3;
 	ctx.outfile_fd = open_outfile(argv[argc - 1]);
 	ctx.infile_fd = open_infile(argv[1]);
 	ctx.prev_fd = ctx.infile_fd;
-	ctx.paths = ft_split(get_path_env(envp), ':');
+	if (path)
+		ctx.paths = ft_split(path, ':');
+	else
+		ctx.paths = NULL;
 	ctx.argv = argv;
 	ctx.envp = envp;
 	return (ctx);

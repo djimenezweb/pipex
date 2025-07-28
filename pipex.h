@@ -40,7 +40,8 @@ void	printerror(int errnum, char *str);
 void	printwarn(int errnum, char *str);
 void	fork_process(int *i, t_pipex *ctx);
 int		is_last(int i, int count);
-void	wait_chidren(int count);
+int		wait_chidren(int count);
+//void	wait_chidren(int count);
 void	free_arr_str(char **arr);
 
 char	*get_path_env(char *envp[]);

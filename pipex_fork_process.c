@@ -34,7 +34,8 @@ static void	cleanup_parent(int *i, t_pipex *ctx)
 	else
 	{
 		close(ctx->outfile_fd);
-		free_arr_str(ctx->paths);
+		if (ctx->paths)
+			free_arr_str(ctx->paths);
 	}
 	(*i)++;
 }
@@ -47,6 +48,7 @@ void	fork_process(int *i, t_pipex *ctx)
 
 	if (!is_last(*i, ctx->loops))
 		create_pipe(ctx);
+	// Obtener comando y comprobarlo???
 	pid = fork();
 	if (pid == 0)
 		run_pipeline_child(*i, *ctx);

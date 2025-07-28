@@ -46,6 +46,8 @@ char	*get_command_path(char *cmd, char **paths)
 
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
+	if (!paths || !paths[0])
+		return (ft_strdup(""));
 	i = 0;
 	if (!ft_strnstr(cmd, "/", 1))
 		slash_cmd = ft_strjoin("/", cmd);
@@ -83,12 +85,18 @@ void	run_pipeline_child(int i, t_pipex ctx)
 	command = split_command(ctx.argv[i + 2]);
 	if (command[0] == '\0')
 	{
-		// handle empty command
 		free(command);
 		exit(127);
 	}
 	args = ft_split(ctx.argv[i + 2], ' ');
 	pathname = get_command_path(command, ctx.paths);
+/* 	if (pathname[0] == '\0')
+		{
+			ft_putstr_fd("command not found: ", STDERR_FILENO);
+			ft_putstr_fd(command, STDERR_FILENO);
+			ft_putstr_fd("\n", STDERR_FILENO);
+			exit(127);
+		}*/
 	if (pathname[0] == '\0' || execve(pathname, args, ctx.envp) == -1)
 	{
 		free(command);
