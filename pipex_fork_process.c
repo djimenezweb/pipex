@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex_fork_process.c                               :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 17:06:19 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/26 17:09:04 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/28 08:43:53 by danielji         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "pipex.h"
 
@@ -39,16 +39,6 @@ static void	cleanup_parent(int *i, t_pipex *ctx)
 	(*i)++;
 }
 
-/* Don't fork process if:
-- There's no infile on first iteration
-- NOT A VALID COMMAND ???? */
-static int	should_skip_command(int i, t_pipex ctx)
-{
-	if (i == 0 && ctx.infile_fd < 0)
-		return (1);
-	return (0);
-}
-
 /* Creates a pipe (except on last iteration). Forks new process.
 Child runs comand, parent closes fds */
 void	fork_process(int *i, t_pipex *ctx)
@@ -57,16 +47,13 @@ void	fork_process(int *i, t_pipex *ctx)
 
 	if (!is_last(*i, ctx->loops))
 		create_pipe(ctx);
-	if (!should_skip_command(*i, *ctx))
+	pid = fork();
+	if (pid == 0)
+		run_pipeline_child(*i, *ctx);
+	else if (pid < 0)
 	{
-		pid = fork();
-		if (pid == 0)
-			run_pipeline_child(*i, *ctx);
-		else if (pid < 0)
-		{
-			perror("pipex");
-			exit(EXIT_FAILURE);
-		}
+		perror("pipex");
+		exit(EXIT_FAILURE);
 	}
 	cleanup_parent(i, ctx);
 }

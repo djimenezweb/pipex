@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex_run_child.c                                  :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:55:28 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/26 17:10:29 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/28 09:10:17 by danielji         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "pipex.h"
 
@@ -36,8 +36,8 @@ static void	cleanup_child(int i, t_pipex ctx)
 		close(ctx.outfile_fd);
 }
 
-/* Returns the first valid path to an executable file */
-/* TO DO: Should return "" if not a valid command ????? */
+/* Returns the first valid path to an executable file
+or an empty string if not a valid command */
 char	*get_command_path(char *cmd, char **paths)
 {
 	int		i;
@@ -67,19 +67,29 @@ char	*get_command_path(char *cmd, char **paths)
 }
 
 /* Sets up input/output redirection, closes fds, and runs the command. */
-/* TO DO: WHAT IF THERE'S NO COMMAND TO RUN???? */
 void	run_pipeline_child(int i, t_pipex ctx)
 {
 	char	*command;
 	char	*pathname;
 	char	**args;
 
+	if (i == 0 && ctx.infile_fd < 0)
+	{
+		// handle invalid infile
+		exit(127);
+	}
 	redirect_stdio(i, ctx);
 	cleanup_child(i, ctx);
 	command = split_command(ctx.argv[i + 2]);
-	args = ft_split(ctx.argv[i +2], ' ');
+	if (command[0] == '\0')
+	{
+		// handle empty command
+		free(command);
+		exit(127);
+	}
+	args = ft_split(ctx.argv[i + 2], ' ');
 	pathname = get_command_path(command, ctx.paths);
-	if (execve(pathname, args, ctx.envp) == -1)
+	if (pathname[0] == '\0' || execve(pathname, args, ctx.envp) == -1)
 	{
 		free(command);
 		free(pathname);
