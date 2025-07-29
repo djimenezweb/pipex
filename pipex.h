@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/26 17:15:01 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/29 19:38:31 by danielji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,32 +26,54 @@
 typedef struct s_pipex
 {
 	int		loops;
-	int		infile_fd;
 	int		outfile_fd;
+	int		infile_fd;
 	int		prev_fd;
 	int		pipefd[2];
 	pid_t	*pids;
-	char	**paths;
-	char	**argv;
 	char	**envp;
+	char	***args;
+	char	**exec_paths;
 }			t_pipex;
 
-char	*get_command_path(char *cmd, char **paths);
+/* pipex.c AND pipex_bonus.c */
+// ??
+
+/* pipex_errors.c */
+
 void	print_cmd_not_found(char *cmd);
 void	printerror(int errnum, char *str);
-void	printwarn(int errnum, char *str);
+
+/* pipex_fork_process.c */
+
 pid_t	fork_process(int i, t_pipex *ctx);
-int		is_last(int i, int count);
-void	free_arr_str(char **arr);
+
+/* pipex_get_exec_paths.c */
 
 char	*get_path_env(char *envp[]);
+char	*get_command_path(char *cmd, char **paths);
+char	**get_path_dirs(char *envp[]);
+char	**get_exec_paths(int count, char ***args, char *envp[]);
+
+/* pipex_helpers.c */
+
+int		is_last(int i, int count);
+void	free_arr_str(char **arr);
+void	free_arr_arr_str(char ***arr);
+void	free_context(t_pipex ctx);
+
+/* pipex_init_context.c */
+
 int		open_infile(char *path);
 int		open_outfile(char *path);
+char	***get_cmd_args(int count, char *argv[]);
 t_pipex	init_context(int argc, char *argv[], char *envp[]);
-void	redirect_stdio(int i, t_pipex ctx);
-void	cleanup_child(int i, t_pipex ctx);
-//void	run_pipeline_child(int i, t_pipex ctx);
-char	*split_command(char *str);
-char	*split_args(char *str);
+
+/* pipex_run_child.c */
+//void	run_pipeline_child(int i, t_pipex ctx)
+
+/* DEBUG ONLY */
+void	print_array_of_strings(char **arr);
+void	print_array_of_array_of_strings(char ***arr);
 
 #endif

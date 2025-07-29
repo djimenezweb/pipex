@@ -26,10 +26,39 @@ void	free_arr_str(char **arr)
 	int	i;
 
 	i = 0;
+	if (!arr)
+		return ;
 	while (arr[i])
 	{
 		free(arr[i]);
 		i++;
 	}
 	free(arr);
+}
+
+/* Frees array of array of strings */
+void	free_arr_arr_str(char ***arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr)
+		return ;
+	while (arr[i])
+	{
+		free_arr_str(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
+/* Frees all allocated memory in `ctx` structure */
+void	free_context(t_pipex ctx)
+{
+	if (ctx.pids)
+		free(ctx.pids);
+	if (ctx.args)
+		free_arr_arr_str(ctx.args);
+	if (ctx.exec_paths)
+		free_arr_str(ctx.exec_paths);
 }

@@ -31,5 +31,6 @@ int	main(int argc, char *argv[], char *envp[])
 	while (i < ctx.loops)
 		fork_process(&i, &ctx);
 	wait_chidren(ctx.loops);
+	free_context(ctx);
 	return (0);
 }

@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex_init_context.c                               :+:      :+:    :+:   */
@@ -6,26 +6,11 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/29 13:34:32 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/29 19:48:50 by danielji         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "pipex.h"
-
-/* Iterates through `envp` and returns the PATH string */
-char	*get_path_env(char *envp[])
-{
-	char	*path;
-
-	while (*envp)
-	{
-		path = ft_strnstr(*envp, "PATH=", 5);
-		if (path)
-			return (path + 5);
-		envp++;
-	}
-	return (NULL);
-}
 
 /* Opens file in read-only and returns its fd.
 On error prints a warning but still returns the fd. */
@@ -36,7 +21,7 @@ int	open_infile(char *path)
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
 	{
-		printwarn(ENOENT, path);
+		printerror(ENOENT, path);
 	}
 	return (fd);
 }
@@ -58,31 +43,35 @@ int	open_outfile(char *path)
 	return (fd);
 }
 
-/* TO DO:
+/* Returns an array of arrays of strings */
+/* TO DO: Free previously allocated memory */
+char	***get_cmd_args(int count, char *argv[])
+{
+	int		i;
+	char	***arr;
 
-./pipex_bonus Makefile "cat" "grep libft" "babebi hola" "wc-l" out.txt
-
-char ** (array de strings)
-ctx.commands =	{ "cat", "babebi", "grep", "wc" }
-
-char ** (array de strings)
-ctx.exec_paths =		{ "/usr/bin/cat", "", "/usr/bin/grep", "/usr/bin/wc" }
-
-char *** (array de arrays de strings) ¿ES BUENA IDEA?
-ctx.args =		{
-					{ "cat" , NULL },
-					{ "grep", "libft" , NULL },
-					{ "babebi", "hola" , NULL },
-					{ "wc", "-l", NULL },
-					NULL
-				}
-*/
+	i = 0;
+	arr = (char ***)malloc(sizeof(char **) * (count + 1));
+	if (!arr)
+		exit(EXIT_FAILURE);
+	while (i < count)
+	{
+		arr[i] = ft_split(argv[i + 2], ' ');
+		if (!arr[i])
+		{
+			// free previously allocated memory
+			exit(EXIT_FAILURE);
+		}
+		i++;
+	}
+	arr[i] = NULL;
+	return (arr);
+}
 
 /* Initializes and returns a `t_pipex` context */
 t_pipex	init_context(int argc, char *argv[], char *envp[])
 {
 	t_pipex	ctx;
-	char	*path;
 
 	ctx.loops = argc - 3;
 	ctx.outfile_fd = open_outfile(argv[argc - 1]);
@@ -91,16 +80,8 @@ t_pipex	init_context(int argc, char *argv[], char *envp[])
 	ctx.pids = (pid_t *)malloc(sizeof(pid_t) * ctx.loops);
 	if (!ctx.pids)
 		exit(EXIT_FAILURE);
-	path = get_path_env(envp);
-	if (path)
-	{
-		ctx.paths = ft_split(path, ':');
-		if (!ctx.paths)
-			exit(EXIT_FAILURE);
-	}
-	else
-		ctx.paths = NULL;
-	ctx.argv = argv;
 	ctx.envp = envp;
+	ctx.args = get_cmd_args(ctx.loops, argv);
+	ctx.exec_paths = get_exec_paths(ctx.loops, ctx.args, envp);
 	return (ctx);
 }
