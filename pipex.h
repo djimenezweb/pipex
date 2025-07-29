@@ -37,6 +37,7 @@ typedef struct s_pipex
 }			t_pipex;
 
 char	*get_command_path(char *cmd, char **paths);
+void	print_cmd_not_found(char *cmd);
 void	printerror(int errnum, char *str);
 void	printwarn(int errnum, char *str);
 pid_t	fork_process(int i, t_pipex *ctx);
@@ -47,8 +48,9 @@ char	*get_path_env(char *envp[]);
 int		open_infile(char *path);
 int		open_outfile(char *path);
 t_pipex	init_context(int argc, char *argv[], char *envp[]);
-
-void	run_pipeline_child(int i, t_pipex ctx);
+void	redirect_stdio(int i, t_pipex ctx);
+void	cleanup_child(int i, t_pipex ctx);
+//void	run_pipeline_child(int i, t_pipex ctx);
 char	*split_command(char *str);
 char	*split_args(char *str);
 

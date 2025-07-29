@@ -12,6 +12,13 @@
 
 #include "pipex.h"
 
+/* Outputs to `STDERR` `command not found: <cmd>`. */
+void	print_cmd_not_found(char *cmd)
+{
+	ft_putstr_fd("command not found: ", STDERR_FILENO);
+	ft_putendl_fd(cmd, STDERR_FILENO);	
+}
+
 /* Outputs to `STDERR` an error message that describes the error code
 passed in the argument `errnum` and an optional string `str`. */
 void	printerror(int errnum, char *str)
