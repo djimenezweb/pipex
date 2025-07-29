@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/29 13:20:37 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/29 13:34:32 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -70,10 +70,11 @@ ctx.exec_paths =		{ "/usr/bin/cat", "", "/usr/bin/grep", "/usr/bin/wc" }
 
 char *** (array de arrays de strings) ¿ES BUENA IDEA?
 ctx.args =		{
-					{ "cat" },
-					{ "grep", "libft" },
-					{ "babebi", "hola" },
-					{ "wc", "-l" }
+					{ "cat" , NULL },
+					{ "grep", "libft" , NULL },
+					{ "babebi", "hola" , NULL },
+					{ "wc", "-l", NULL },
+					NULL
 				}
 */
 
