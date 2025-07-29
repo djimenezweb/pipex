@@ -30,6 +30,7 @@ typedef struct s_pipex
 	int		outfile_fd;
 	int		prev_fd;
 	int		pipefd[2];
+	pid_t	*pids;
 	char	**paths;
 	char	**argv;
 	char	**envp;
@@ -38,10 +39,8 @@ typedef struct s_pipex
 char	*get_command_path(char *cmd, char **paths);
 void	printerror(int errnum, char *str);
 void	printwarn(int errnum, char *str);
-void	fork_process(int *i, t_pipex *ctx);
+pid_t	fork_process(int i, t_pipex *ctx);
 int		is_last(int i, int count);
-int		wait_chidren(int count);
-//void	wait_chidren(int count);
 void	free_arr_str(char **arr);
 
 char	*get_path_env(char *envp[]);

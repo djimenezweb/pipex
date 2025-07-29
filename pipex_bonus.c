@@ -22,7 +22,7 @@ void	bad_args(void)
 int	main(int argc, char *argv[], char *envp[])
 {
 	int		i;
-	int status;
+	int		status;
 	t_pipex	ctx;
 
 	if (argc < 5)
@@ -30,7 +30,15 @@ int	main(int argc, char *argv[], char *envp[])
 	i = 0;
 	ctx = init_context(argc, argv, envp);
 	while (i < ctx.loops)
-		fork_process(&i, &ctx);
-	status = wait_chidren(ctx.loops);
-	return WEXITSTATUS(status);
+	{
+		ctx.pids[i] = fork_process(i, &ctx);
+		i++;
+	}
+	i = 0;
+	while (i < ctx.loops)
+	{
+		waitpid(ctx.pids[i], &status, 0);
+		i++;
+	}
+	return (WEXITSTATUS(status));
 }

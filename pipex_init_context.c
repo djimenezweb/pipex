@@ -69,8 +69,15 @@ t_pipex	init_context(int argc, char *argv[], char *envp[])
 	ctx.outfile_fd = open_outfile(argv[argc - 1]);
 	ctx.infile_fd = open_infile(argv[1]);
 	ctx.prev_fd = ctx.infile_fd;
+	ctx.pids = malloc(sizeof(pid_t) * ctx.loops);
+	if (!ctx.pids)
+		exit(EXIT_FAILURE);
 	if (path)
+	{
 		ctx.paths = ft_split(path, ':');
+		if (!ctx.paths)
+			exit(EXIT_FAILURE);
+	}
 	else
 		ctx.paths = NULL;
 	ctx.argv = argv;

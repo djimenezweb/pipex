@@ -90,13 +90,14 @@ void	run_pipeline_child(int i, t_pipex ctx)
 	}
 	args = ft_split(ctx.argv[i + 2], ' ');
 	pathname = get_command_path(command, ctx.paths);
-/* 	if (pathname[0] == '\0')
+	if (pathname[0] == '\0')
 		{
+			//perror("pipex");
 			ft_putstr_fd("command not found: ", STDERR_FILENO);
 			ft_putstr_fd(command, STDERR_FILENO);
 			ft_putstr_fd("\n", STDERR_FILENO);
 			exit(127);
-		}*/
+		}
 	if (pathname[0] == '\0' || execve(pathname, args, ctx.envp) == -1)
 	{
 		free(command);

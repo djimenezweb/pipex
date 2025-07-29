@@ -20,27 +20,6 @@ int	is_last(int i, int count)
 	return (0);
 }
 
-/* Waits for the specified number of child processes to finish. */
-int	wait_chidren(int count)
-{
-	int	i;
-	int status;
-
-	i = 0;
-	status = 0;
-	while (i < count)
-	{
-		/* if (wait(&status) > 0)
-			i++;
-		else if (errno == ECHILD)
-			break ; */
-		wait(&status);
-		//printf("Status = %i\n", WEXITSTATUS(status));
-		i++;
-	}
-	return (status);
-}
-
 /* Frees each string in an array of strings and the array itself. */
 void	free_arr_str(char **arr)
 {
