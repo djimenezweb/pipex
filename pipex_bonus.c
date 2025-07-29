@@ -40,5 +40,6 @@ int	main(int argc, char *argv[], char *envp[])
 		waitpid(ctx.pids[i], &status, 0);
 		i++;
 	}
+	free(ctx.pids);
 	return (WEXITSTATUS(status));
 }
