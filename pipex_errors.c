@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex_errors.c                                     :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 09:01:12 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/26 16:41:42 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/29 12:57:32 by danielji         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "pipex.h"
 
@@ -16,7 +16,7 @@
 void	print_cmd_not_found(char *cmd)
 {
 	ft_putstr_fd("command not found: ", STDERR_FILENO);
-	ft_putendl_fd(cmd, STDERR_FILENO);	
+	ft_putendl_fd(cmd, STDERR_FILENO);
 }
 
 /* Outputs to `STDERR` an error message that describes the error code
