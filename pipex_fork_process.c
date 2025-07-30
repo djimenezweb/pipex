@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 17:06:19 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/30 10:22:29 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:33:51 by danielji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@
 static void	create_pipe(t_pipex *ctx)
 {
 	if (pipe(ctx->pipefd) == -1)
-	{
-		perror("pipex");
-		exit(EXIT_FAILURE);
-	}
+		perror_and_exit();
 }
 
 /* Closes fds, assigns read end of pipe to `prev_fd` for the next iteration */
@@ -57,10 +54,7 @@ pid_t	fork_process(int i, t_pipex *ctx)
 		exec_child(i, *ctx);
 	}
 	else if (pid < 0)
-	{
-		perror("pipex");
-		exit(EXIT_FAILURE);
-	}
+		perror_and_exit();
 	cleanup_parent(i, ctx);
 	return (pid);
 }

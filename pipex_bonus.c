@@ -6,16 +6,17 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/30 10:13:37 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:26:13 by danielji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-/* TO DO */
+/* Prints error message and exits program */
 void	bad_args(void)
 {
-	ft_putendl_fd("Bad arguments", STDERR_FILENO);
+	printerror(-1, "Bad arguments. Usage:");
+	printerror(-1, "./pipex_bonus infile cmd1 cmd2 cmd3 ... cmdn outfile");
 	exit(EXIT_FAILURE);
 }
 

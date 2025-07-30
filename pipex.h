@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/30 11:33:45 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:35:01 by danielji         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
@@ -41,6 +41,7 @@ typedef struct s_pipex
 
 /* pipex_errors.c */
 
+void	perror_and_exit(void);
 void	print_cmd_not_found(char *cmd);
 void	printerror(int errnum, char *str);
 
@@ -79,7 +80,7 @@ void	exec_child(int i, t_pipex ctx);
 /* pipex_split_quote.c */
 char	**ft_split_quote(char const *s, char c);
 
-/* DEBUG ONLY */
+/* DEBUG ONLY - DO NOT INCLUDE !!!! */
 void	print_array_of_strings(char **arr);
 void	print_array_of_array_of_strings(char ***arr);
 
