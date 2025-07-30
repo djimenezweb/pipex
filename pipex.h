@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/30 10:11:42 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/30 11:33:45 by danielji         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef PIPEX_H
 # define PIPEX_H
@@ -75,6 +75,9 @@ t_pipex	init_context(int argc, char *argv[], char *envp[]);
 void	redirect_stdio(int i, t_pipex ctx);
 void	cleanup_child(int i, t_pipex ctx);
 void	exec_child(int i, t_pipex ctx);
+
+/* pipex_split_quote.c */
+char	**ft_split_quote(char const *s, char c);
 
 /* DEBUG ONLY */
 void	print_array_of_strings(char **arr);
