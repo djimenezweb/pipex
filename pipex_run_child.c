@@ -12,26 +12,36 @@
 
 #include "pipex.h"
 
-/* Sets up input/output redirection, closes fds, and runs the command.
-void	run_pipeline_child(int i, t_pipex ctx)
+/* Redirects input from previous fd and output to pipeline's write end.
+On last iteration, output is instead redirected to outfile */
+void	redirect_stdio(int i, t_pipex ctx)
 {
-	char	*command;
-	char	*pathname;
-	char	**args;
+	dup2(ctx.prev_fd, STDIN_FILENO);
+	if (is_last(i, ctx.loops))
+		dup2(ctx.outfile_fd, STDOUT_FILENO);
+	else
+		dup2(ctx.pipefd[1], STDOUT_FILENO);
+}
 
-	if (i == 0 && ctx.infile_fd < 0)
+/* Closes fds. On last iteration, closes outfile fd */
+void	cleanup_child(int i, t_pipex ctx)
+{
+	close(ctx.prev_fd);
+	if (!is_last(i, ctx.loops))
 	{
-		// handle invalid infile
-		exit(127);
+		close(ctx.pipefd[0]);
+		close(ctx.pipefd[1]);
 	}
-	redirect_stdio(i, ctx);
-	cleanup_child(i, ctx);
+	if (is_last(i, ctx.loops))
+		close(ctx.outfile_fd);
+}
 
-	if (pathname[0] == '\0' || execve(pathname, args, ctx.envp) == -1)
-	{
-		free(command);
-		free(pathname);
-		free_arr_str(args);
-		exit(127);
-	}
-}*/
+/* Calls `execve` if executable path is not empty
+and if `infile` is valid on the first iteration */
+void	exec_child(int i, t_pipex ctx)
+{
+	if (ctx.exec_paths[i][0] == '\0' || (i == 0 && ctx.infile_fd < 0))
+		free_context(ctx, 1);
+	if (execve(ctx.exec_paths[i], ctx.args[i], ctx.envp) == -1)
+		free_context(ctx, 1);
+}

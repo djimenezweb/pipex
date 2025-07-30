@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:58:43 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/29 19:38:31 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/30 10:11:42 by danielji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,9 @@ char	**get_exec_paths(int count, char ***args, char *envp[]);
 
 int		is_last(int i, int count);
 void	free_arr_str(char **arr);
+void	free_arr_str_l(char **arr, int i);
 void	free_arr_arr_str(char ***arr);
-void	free_context(t_pipex ctx);
+void	free_context(t_pipex ctx, int exit_flag);
 
 /* pipex_init_context.c */
 
@@ -70,7 +71,10 @@ char	***get_cmd_args(int count, char *argv[]);
 t_pipex	init_context(int argc, char *argv[], char *envp[]);
 
 /* pipex_run_child.c */
-//void	run_pipeline_child(int i, t_pipex ctx)
+
+void	redirect_stdio(int i, t_pipex ctx);
+void	cleanup_child(int i, t_pipex ctx);
+void	exec_child(int i, t_pipex ctx);
 
 /* DEBUG ONLY */
 void	print_array_of_strings(char **arr);

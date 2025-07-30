@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:32:16 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/26 17:07:45 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/30 10:13:37 by danielji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,6 @@ int	main(int argc, char *argv[], char *envp[])
 		waitpid(ctx.pids[i], &status, 0);
 		i++;
 	}
-	free_context(ctx);
+	free_context(ctx, 0);
 	return (WEXITSTATUS(status));
 }

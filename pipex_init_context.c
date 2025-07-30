@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/29 19:48:50 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/30 09:54:18 by danielji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	open_outfile(char *path)
 }
 
 /* Returns an array of arrays of strings */
-/* TO DO: Free previously allocated memory */
 char	***get_cmd_args(int count, char *argv[])
 {
 	int		i;
@@ -59,7 +58,12 @@ char	***get_cmd_args(int count, char *argv[])
 		arr[i] = ft_split(argv[i + 2], ' ');
 		if (!arr[i])
 		{
-			// free previously allocated memory
+			while (i > 0)
+			{
+				i--;
+				free_arr_str(arr[i]);
+			}
+			free(arr);
 			exit(EXIT_FAILURE);
 		}
 		i++;

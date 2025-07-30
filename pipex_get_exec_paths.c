@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 19:01:01 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/29 19:48:50 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/30 09:51:34 by danielji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,21 @@ char	*get_path_env(char *envp[])
 	return (NULL);
 }
 
-/* TO DO: TOO MANY LINES */
+/* Adds a `/` to the beginning of a string `str` if it's missing. */
+char	*add_slash(char *str)
+{
+	if (!str)
+		return (ft_strdup(""));
+	if (!ft_strnstr(str, "/", 1))
+		return (ft_strjoin("/", str));
+	return (ft_strdup(str));
+}
+
 /* Returns the first valid path to an executable file
 or an empty string if not a valid command */
 char	*get_command_path(char *cmd, char **paths)
 {
 	int		i;
-	char	*slash_cmd;
 	char	*pathname;
 
 	if (access(cmd, X_OK) == 0)
@@ -41,22 +49,19 @@ char	*get_command_path(char *cmd, char **paths)
 	if (!paths || !paths[0])
 		return (ft_strdup(""));
 	i = 0;
-	if (!ft_strnstr(cmd, "/", 1))
-		slash_cmd = ft_strjoin("/", cmd);
-	else
-		slash_cmd = ft_strdup(cmd);
+	cmd = add_slash(cmd);
 	while (paths[i])
 	{
-		pathname = ft_strjoin(paths[i], slash_cmd);
+		pathname = ft_strjoin(paths[i], cmd);
 		if (access(pathname, X_OK) == 0)
 		{
-			free(slash_cmd);
+			free(cmd);
 			return (pathname);
 		}
 		free(pathname);
 		i++;
 	}
-	free(slash_cmd);
+	free(cmd);
 	return (ft_strdup(""));
 }
 
@@ -79,7 +84,6 @@ char	**get_path_dirs(char *envp[])
 	return (paths);
 }
 
-/* TO DO: Free previously allocated memory */
 /* Returns array of executable paths for given commands.
  Returns empty array if envp is NULL or does not contain PATH variable. */
 char	**get_exec_paths(int count, char ***args, char *envp[])
@@ -94,12 +98,16 @@ char	**get_exec_paths(int count, char ***args, char *envp[])
 	if (!exec_paths)
 	{
 		free_arr_str(path_dirs);
-		// Free previously allocated memory
 		exit(EXIT_FAILURE);
 	}
 	while (i < count)
 	{
 		exec_paths[i] = get_command_path(args[i][0], path_dirs);
+		if (!exec_paths[i])
+		{
+			free_arr_str_l(exec_paths, i);
+			exit(EXIT_FAILURE);
+		}
 		i++;
 	}
 	exec_paths[count] = NULL;
