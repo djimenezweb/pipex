@@ -37,7 +37,8 @@ typedef struct s_pipex
 }			t_pipex;
 
 /* pipex.c AND pipex_bonus.c */
-// ??
+
+void	bad_args(void);
 
 /* pipex_errors.c */
 
