@@ -62,10 +62,14 @@ char	**get_exec_paths(int count, char ***args, char *envp[]);
 /* pipex_helpers.c */
 
 int		is_last(int i, int count);
-void	free_arr_str(char **arr);
-void	free_arr_str_l(char **arr, int i);
-void	free_arr_arr_str(char ***arr);
 void	free_context(t_pipex ctx, int exit_flag);
+
+/* pipex_arr_helpers.c */
+
+void	free_arr_str_l(char **arr, int i);
+void	free_arr_str(char **arr);
+void	free_arr_arr_str_exit_l(char ***arr, int i);
+void	free_arr_arr_str(char ***arr);
 
 /* pipex_init_context.c */
 
