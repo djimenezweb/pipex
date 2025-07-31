@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:51:14 by danielji          #+#    #+#             */
-/*   Updated: 2025/07/30 09:54:18 by danielji         ###   ########.fr       */
+/*   Updated: 2025/07/31 11:46:32 by danielji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,24 @@ int	open_outfile(char *path)
 	return (fd);
 }
 
+/* Returns an array with an empty string */
+static char	**empty_arr(void)
+{
+	char	**arr;
+
+	arr = malloc(sizeof(char *) * 2);
+	if (!arr)
+		return (NULL);
+	arr[0] = ft_strdup("");
+	if (!arr[0])
+	{
+		free(arr);
+		return (NULL);
+	}
+	arr[1] = NULL;
+	return (arr);
+}
+
 /* Returns an array with arrays of strings
 representing the commands and arguments */
 char	***get_cmd_args(int count, char *argv[])
@@ -56,14 +74,13 @@ char	***get_cmd_args(int count, char *argv[])
 	{
 		arr[i] = ft_split(argv[i + 2], ' ');
 		if (!arr[i])
+			free_arr_arr_str_exit_l(arr, i);
+		if (!arr[i][0])
 		{
-			while (i > 0)
-			{
-				i--;
-				free_arr_str(arr[i]);
-			}
-			free(arr);
-			exit(EXIT_FAILURE);
+			free(arr[i]);
+			arr[i] = empty_arr();
+			if (!arr[i])
+				free_arr_arr_str_exit_l(arr, i);
 		}
 		i++;
 	}

@@ -23,7 +23,10 @@ void	perror_and_exit(void)
 void	print_cmd_not_found(char *cmd)
 {
 	ft_putstr_fd("command not found: ", STDERR_FILENO);
-	ft_putendl_fd(cmd, STDERR_FILENO);
+	if (cmd[0] == '\0')
+		ft_putendl_fd("''", STDERR_FILENO);
+	else
+		ft_putendl_fd(cmd, STDERR_FILENO);
 }
 
 /* Outputs to `STDERR` an error message that describes the error code

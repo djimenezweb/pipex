@@ -42,9 +42,7 @@ pid_t	fork_process(int i, t_pipex *ctx)
 	if (!is_last(i, ctx->loops))
 		create_pipe(ctx);
 	command = ctx->args[i][0];
-	if (command[0] == '\0')
-		free_context(*ctx, 1);
-	if (ctx->exec_paths[i][0] == '\0')
+	if (command[0] == '\0' || ctx->exec_paths[i][0] == '\0')
 		print_cmd_not_found(command);
 	pid = fork();
 	if (pid == 0)

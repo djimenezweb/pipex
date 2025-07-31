@@ -46,7 +46,7 @@ char	*get_command_path(char *cmd, char **paths)
 
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
-	if (!paths || !paths[0])
+	if (!cmd || !cmd[0] || !paths || !paths[0])
 		return (ft_strdup(""));
 	i = 0;
 	cmd = add_slash(cmd);

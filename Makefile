@@ -2,7 +2,7 @@ NAME		= pipex
 NAME_BONUS	= pipex_bonus
 CC			= cc
 CFLAGS		= -Wall -Werror -Wextra -I./libft
-SRC			= pipex_errors.c pipex_fork_process.c pipex_get_exec_paths.c pipex_helpers.c pipex_init_context.c pipex_run_child.c
+SRC			= pipex_arr_helpers.c pipex_errors.c pipex_fork_process.c pipex_get_exec_paths.c pipex_helpers.c pipex_init_context.c pipex_run_child.c
 OBJ			= $(SRC:.c=.o)
 DEPS		= libft/libft.a
 
