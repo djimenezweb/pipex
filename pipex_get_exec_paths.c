@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-/* Iterates through `envp` and returns the PATH string */
+/* Iterates through `envp` and returns `PATH` */
 char	*get_path_env(char *envp[])
 {
 	char	*path;
@@ -66,7 +66,7 @@ char	*get_command_path(char *cmd, char **paths)
 }
 
 /* Parses PATH variable from `envp` into an array of directory strings.
-Returns an empty array if PATH or `environment` are missing. */
+Returns an empty array if `PATH` or `environment` are missing. */
 char	**get_path_dirs(char *envp[])
 {
 	char	*path;

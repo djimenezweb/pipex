@@ -48,6 +48,8 @@ void	printerror(int errnum, char *str);
 
 /* pipex_fork_process.c */
 
+void	create_pipe(t_pipex *ctx);
+void	cleanup_parent(int i, t_pipex *ctx);
 pid_t	fork_process(int i, t_pipex *ctx);
 
 /* pipex_get_exec_paths.c */
@@ -77,12 +79,5 @@ t_pipex	init_context(int argc, char *argv[], char *envp[]);
 void	redirect_stdio(int i, t_pipex ctx);
 void	cleanup_child(int i, t_pipex ctx);
 void	exec_child(int i, t_pipex ctx);
-
-/* pipex_split_quote.c */
-char	**ft_split_quote(char const *s, char c);
-
-/* DEBUG ONLY - DO NOT INCLUDE !!!! */
-void	print_array_of_strings(char **arr);
-void	print_array_of_array_of_strings(char ***arr);
 
 #endif

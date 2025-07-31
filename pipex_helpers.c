@@ -20,7 +20,8 @@ int	is_last(int i, int count)
 	return (0);
 }
 
-/* Frees each string in an array of strings and the array itself. */
+/* Frees each string in an array of strings up to the limit specified in `i`.
+Frees the array itself. */
 void	free_arr_str_l(char **arr, int i)
 {
 	if (!arr || i <= 0)

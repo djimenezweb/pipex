@@ -20,13 +20,11 @@ int	open_infile(char *path)
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-	{
 		printerror(ENOENT, path);
-	}
 	return (fd);
 }
 
-/* Opens file for writing and returns its fd. Exits program on error */
+/* Opens file for writing and returns its fd. Exits program on error. */
 int	open_outfile(char *path)
 {
 	int	fd;
@@ -43,7 +41,8 @@ int	open_outfile(char *path)
 	return (fd);
 }
 
-/* Returns an array of arrays of strings */
+/* Returns an array with arrays of strings
+representing the commands and arguments */
 char	***get_cmd_args(int count, char *argv[])
 {
 	int		i;

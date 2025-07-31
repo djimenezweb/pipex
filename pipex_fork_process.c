@@ -13,14 +13,14 @@
 #include "pipex.h"
 
 /* Creates a pipe. Exits program on error. */
-static void	create_pipe(t_pipex *ctx)
+void	create_pipe(t_pipex *ctx)
 {
 	if (pipe(ctx->pipefd) == -1)
 		perror_and_exit();
 }
 
 /* Closes fds, assigns read end of pipe to `prev_fd` for the next iteration */
-static void	cleanup_parent(int i, t_pipex *ctx)
+void	cleanup_parent(int i, t_pipex *ctx)
 {
 	close(ctx->prev_fd);
 	if (!is_last(i, ctx->loops))
