@@ -20,7 +20,12 @@ int	open_infile(char *path)
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-		printerror(ENOENT, path);
+	{
+		if (!access(path, F_OK) && access(path, R_OK) < 0)
+			printerror(EACCES, path);
+		else
+			printerror(ENOENT, path);
+	}
 	return (fd);
 }
 
